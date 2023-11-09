@@ -1,4 +1,4 @@
-package ru.kolpakov.Market.models;
+package ru.kolpakov.Market.App.models;
 
 import java.util.List;
 

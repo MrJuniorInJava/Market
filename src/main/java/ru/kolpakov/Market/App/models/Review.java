@@ -1,4 +1,4 @@
-package ru.kolpakov.Market.models;
+package ru.kolpakov.Market.App.models;
 
 public class Review {
     private int id;
