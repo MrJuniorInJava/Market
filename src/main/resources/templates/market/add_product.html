@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Add Product</title>
+</head>
+<body>
+
+<h1>Add Product</h1>
+
+<form action="/market/add_product" method="post"  th:object="${product}">
+    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+
+    <label for="name">Введите название товара</label>
+    <input type="text" th:field="*{name}" id="name"/>
+    <br/>
+    <label for="description">Введите описание товара</label>
+    <input type="text" th:field="*{description}" id="description"/>
+    <br/>
+    <label for="price">Введите цену товара</label>
+    <input type="text" th:field="*{price}" id="price"/>
+    <br/>
+
+
+
+    <input type="submit" value="Добавить товар в магазин"/>
+</form>
+
+</body>
+</html>

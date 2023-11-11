@@ -1,10 +1,15 @@
 package ru.kolpakov.Market.SecurityForApp.models;
 
+import ru.kolpakov.Market.App.models.Cart;
+import ru.kolpakov.Market.App.models.Product;
+
 import javax.persistence.*;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "Person")
@@ -27,6 +32,10 @@ public class Person {
     private String password;
     @Column(name = "role")
     private String role;
+    @OneToOne(mappedBy = "owner")
+    private Cart cart;
+    @OneToMany(mappedBy = "owner", fetch = FetchType.EAGER)
+    private List<Product> products;
 
     public int getId() {
         return id;
@@ -66,6 +75,29 @@ public class Person {
 
     public void setRole(String role) {
         this.role = role;
+    }
+
+    public Cart getCart() {
+        return cart;
+    }
+
+    public void setCart(Cart cart) {
+        this.cart = cart;
+    }
+
+    public List<Product> getProducts() {
+        return products;
+    }
+
+    public void setProducts(List<Product> products) {
+        this.products = products;
+    }
+    public void addProductToPerson(Product product){
+        product.setOwner(this);
+        if(this.products==null){
+            this.products=new ArrayList<>();
+        }
+        this.products.add(product);
     }
 
     @Override

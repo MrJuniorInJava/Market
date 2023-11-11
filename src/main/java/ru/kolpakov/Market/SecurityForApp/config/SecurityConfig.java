@@ -26,13 +26,12 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeRequests()
-                .antMatchers("/admin").hasRole("ADMIN")//авторизация по ролям
                 .antMatchers("/auth/login", "/auth/registration", "/error").permitAll()//Пускать всех на эти страницы
                 .anyRequest().hasAnyRole("USER", "ADMIN")//На все другие страницы пускать только пользователей с данными ролями
                 .and()
-                .formLogin().loginPage("/security/auth/login")// Настраиваем форму для аутентификации
+                .formLogin().loginPage("/auth/login")// Настраиваем форму для аутентификации
                 .loginProcessingUrl("/process_login")// Сюда будут приходить данные с формы аутентификации
-                .defaultSuccessUrl("/hello", true) //При успешно  аутентификации перенаправление на данную страницу
+                .defaultSuccessUrl("/market", true) //При успешно  аутентификации перенаправление на данную страницу
                 .failureUrl("/auth/login?error")// Перенаправление при неудачной аутентификации
                 .and()
                 .logout().logoutUrl("/logout")//Настраиваем выход аутентифицированного пользователя(Удаление сессии,

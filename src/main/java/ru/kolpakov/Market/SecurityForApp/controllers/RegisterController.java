@@ -27,7 +27,7 @@ public class RegisterController {
 
     @GetMapping("/registration")
     public String registrationPage(@ModelAttribute("person") Person person) {
-        return "auth/registration";
+        return "security/auth/registration";
     }
 
     @PostMapping("/registration")
@@ -36,7 +36,7 @@ public class RegisterController {
         personValidator.validate(person, bindingResult);
 
         if (bindingResult.hasErrors())
-            return "auth/registration";
+            return "security/auth/registration";
 
         personRegisterService.register(person);
 
