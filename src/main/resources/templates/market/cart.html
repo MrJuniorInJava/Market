@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <meta charset="UTF-8">
+    <title>Корзина</title>
+</head>
+<body>
+<div th:each="product : ${products}" >
+    <h3 th:text="${product.name}"></h3>
+    <h4>Описание</h4>
+    <p th:text="${product.description}"></p>
+    <p th:text="'Price: ' + ${product.price}"></p>
+    <p th:text="'Продавец: ' + ${product.getOwner().getUsername()}"></p>
+
+    <h4>Properties:</h4>
+    <ul>
+        <li th:each="property : ${product.properties}" th:text="${property.name + ': ' + property.value}"></li>
+    </ul>
+</div>
+</body>
+</html>

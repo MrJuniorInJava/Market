@@ -49,6 +49,11 @@ public class ProductController {
         productService.deleteProductById(id);
         return "redirect:/market";
     }
+    @GetMapping("/cart/{id}")
+    public String cartPage(@PathVariable("id") int id, Model model){
+        model.addAttribute("products",productService.findProductsForPersonCart());
+        return "market/cart";
+    }
 
 
 }

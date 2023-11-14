@@ -29,12 +29,13 @@ public class ProductService {
         return productsRepository.findAll();
     }
 
+    public List<Product> findProductsForPersonCart() {
+        return returnPersonFromContext().getProducts();
+    }
+
     @Transactional
     public void addProduct(Product product) {
-        PersonDetails personDetails = (PersonDetails) SecurityContextHolder.getContext()
-                .getAuthentication().getPrincipal();
-        Person person = personDetails.returnPerson();
-        person.addProductToPerson(product);
+        returnPersonFromContext().addProductToPerson(product);
         product.setTime(LocalDateTime.now());
         productsRepository.save(product);
     }
@@ -49,5 +50,14 @@ public class ProductService {
         return productsRepository.findAll().stream()
                 .filter(object -> pattern.matcher(object.getName()).find())
                 .collect(Collectors.toList());
+    }
+
+
+    //Вспомогательные методы
+
+    private static Person returnPersonFromContext() {
+        PersonDetails personDetails = (PersonDetails) SecurityContextHolder.getContext()
+                .getAuthentication().getPrincipal();
+        return personDetails.returnPerson();
     }
 }
