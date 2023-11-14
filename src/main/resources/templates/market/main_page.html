@@ -45,8 +45,7 @@
 </form>
 <br/>
 <br/>
-<form action="/market/cart">
-    <input type="hidden" name="id" th:value="${cart_id}"/>
+<form th:action="@{/market/cart/{id}(id=${cart_id})}">
     <button>Корзина</button>
 </form>
 <br/>

@@ -27,5 +27,13 @@ public class CartService {
         cart.addProductToCart(product);
 
     }
+    @Transactional
+    public void deleteProductFromCart(int idProduct, int idCart) {
+
+        Cart cart = cartRepository.findById(idCart).orElse(null);
+        Product product = productsRepository.findById(idProduct).orElse(null);
+        cart.deleteProductFromCart(product);
+
+    }
 
 }

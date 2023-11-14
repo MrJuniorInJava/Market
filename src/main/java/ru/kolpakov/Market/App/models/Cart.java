@@ -5,6 +5,7 @@ import ru.kolpakov.Market.SecurityForApp.models.Person;
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
+
 @Entity
 @Table(name = "Cart")
 public class Cart {
@@ -12,10 +13,10 @@ public class Cart {
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-    @OneToMany(mappedBy = "cart",fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "cart", fetch = FetchType.EAGER)
     private List<Product> products;
     @OneToOne(cascade = CascadeType.REMOVE)
-    @JoinColumn(name = "person_id",referencedColumnName = "id")
+    @JoinColumn(name = "person_id", referencedColumnName = "id")
     private Person owner;
 
     public int getId() {
@@ -41,13 +42,17 @@ public class Cart {
     public void setOwner(Person owner) {
         this.owner = owner;
     }
+//Вспомогательные методы
 
-
-    public  void addProductToCart(Product product){
-        if(this.products==null){
-            products=new ArrayList<>();
+    public void addProductToCart(Product product) {
+        if (this.products == null) {
+            products = new ArrayList<>();
         }
         this.products.add(product);
         product.setCart(this);
+    }
+    public void deleteProductFromCart(Product product) {
+        this.products.remove(product);
+        product.setCart(null);
     }
 }

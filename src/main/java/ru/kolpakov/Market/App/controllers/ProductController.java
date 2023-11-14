@@ -54,8 +54,8 @@ public class ProductController {
         productService.deleteProductById(id);
         return "redirect:/market";
     }
-    @GetMapping("/cart")
-    public String cartPage(@RequestParam("id") int id, Model model){
+    @GetMapping("/cart/{id}")
+    public String cartPage(@PathVariable("id") int id, Model model){
         model.addAttribute("products",productService.findProductsForPersonCart());
         return "market/cart";
     }
@@ -63,6 +63,11 @@ public class ProductController {
     public String addProductToCart(@RequestParam("product_id") int idProduct, @RequestParam("cart_id") int idCart) {
         cartService.addProductToCart(idProduct,idCart);
         return "redirect:/market";
+    }
+    @PostMapping("/delete_product_from_cart")
+    public String deleteProductFromCart(@RequestParam("product_id") int idProduct, @RequestParam("cart_id") int idCart) {
+        cartService.deleteProductFromCart(idProduct,idCart);
+        return "redirect:/market/cart/{cart_id}";
     }
 
 

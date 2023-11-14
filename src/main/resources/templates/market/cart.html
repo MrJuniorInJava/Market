@@ -14,7 +14,11 @@
     <p th:text="${product.description}"></p>
     <p th:text="'Price: ' + ${product.price}"></p>
     <p th:text="'Продавец: ' + ${product.getOwner().getUsername()}"></p>
-
+    <form th:method="DELETE" th:action="@{/market/delete_product_from_cart}">
+        <input type="hidden" name="product_id" th:value="${product.getId()}"/>
+        <input type="hidden" name="cart_id" th:value="${product.getCart().getId()}"/>
+        <button>Удалить товар из корзины</button>
+    </form>
 </div>
 </body>
 </html>
