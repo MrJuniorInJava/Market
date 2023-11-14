@@ -11,6 +11,9 @@ import ru.kolpakov.Market.SecurityForApp.security.PersonDetails;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional(readOnly = true)
@@ -35,8 +38,16 @@ public class ProductService {
         product.setTime(LocalDateTime.now());
         productsRepository.save(product);
     }
+
     @Transactional
-    public void deleteProductById(int id){
+    public void deleteProductById(int id) {
         productsRepository.deleteById(id);
+    }
+
+    public List<Product> searchByFirstChars(String name) {
+        Pattern pattern = Pattern.compile(name, Pattern.CASE_INSENSITIVE);
+        return productsRepository.findAll().stream()
+                .filter(object -> pattern.matcher(object.getName()).find())
+                .collect(Collectors.toList());
     }
 }

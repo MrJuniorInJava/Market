@@ -7,6 +7,8 @@ import org.springframework.web.bind.annotation.*;
 import ru.kolpakov.Market.App.models.Product;
 import ru.kolpakov.Market.App.services.ProductService;
 
+import java.util.Collections;
+
 @Controller
 @RequestMapping("/market")
 public class ProductController {
@@ -22,10 +24,17 @@ public class ProductController {
         model.addAttribute("products", productService.findAll());
         return "market/main_page";
     }
+    @PostMapping("/search")
+    public String searchProduct(@RequestParam(value = "name", required = false) String name,
+                                Model model) {
+        model.addAttribute("products", productService.searchByFirstChars(name));
+        return "market/main_page";
+    }
 
     @GetMapping("/add_product")
     public String addProductPage(Model model) {
         model.addAttribute("product", new Product());
+        model.addAttribute("searchProducts", Collections.emptyList());
         return "market/add_product";
     }
 
@@ -34,10 +43,12 @@ public class ProductController {
         productService.addProduct(product);
         return "redirect:/market";
     }
+
     @PostMapping("/delete_product")
     public String deleteProduct(@RequestParam("id") int id) {
         productService.deleteProductById(id);
         return "redirect:/market";
     }
+
 
 }

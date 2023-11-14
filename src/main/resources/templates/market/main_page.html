@@ -2,10 +2,16 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Market</title>
 </head>
 <body>
 <h1>Product List</h1>
+<form th:method="POST" th:action="@{/market/search}">
+    <label for="name">Введите поисковой запрос</label>
+    <input type="text" id="name" name="name"/>
+    <br/>
+    <input type="submit" value="Искать!"/>
+</form>
 
 <div th:each="product : ${products}">
     <h3 th:text="${product.name}"></h3>
@@ -13,11 +19,6 @@
     <p th:text="${product.description}"></p>
     <p th:text="'Price: ' + ${product.price}"></p>
     <p th:text="'Продавец: ' + ${product.getOwner().getUsername()}"></p>
-
-    <h4>Reviews:</h4>
-    <ul>
-        <li th:each="review : ${product.reviews}" th:text="${review.comment}"></li>
-    </ul>
 
     <h4>Properties:</h4>
     <ul>
@@ -35,7 +36,11 @@
 <br/>
 <form action="/market/add_product">
     <button>Добавить товар в ленту</button>
-
+</form>
+<br/>
+<br/>
+<form th:action="@{/logout}" th:method="POST">
+    <input type="submit" value="Выйти">
 </form>
 </body>
 </html>
