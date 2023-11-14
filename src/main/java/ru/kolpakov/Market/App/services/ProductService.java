@@ -30,7 +30,7 @@ public class ProductService {
     }
 
     public List<Product> findProductsForPersonCart() {
-        return returnPersonFromContext().getProducts();
+        return returnPersonFromContext().getCart().getProducts();
     }
 
     @Transactional
@@ -55,7 +55,7 @@ public class ProductService {
 
     //Вспомогательные методы
 
-    private static Person returnPersonFromContext() {
+    public static Person returnPersonFromContext() {
         PersonDetails personDetails = (PersonDetails) SecurityContextHolder.getContext()
                 .getAuthentication().getPrincipal();
         return personDetails.returnPerson();

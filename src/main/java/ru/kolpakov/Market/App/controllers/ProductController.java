@@ -5,6 +5,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import ru.kolpakov.Market.App.models.Product;
+import ru.kolpakov.Market.App.services.CartService;
 import ru.kolpakov.Market.App.services.ProductService;
 
 import java.util.Collections;
@@ -13,15 +14,19 @@ import java.util.Collections;
 @RequestMapping("/market")
 public class ProductController {
     private final ProductService productService;
+    private final CartService cartService;
 
     @Autowired
-    public ProductController(ProductService productService) {
+    public ProductController(ProductService productService, CartService cartService) {
         this.productService = productService;
+        this.cartService = cartService;
     }
 
     @GetMapping()
     public String mainPage(Model model) {
         model.addAttribute("products", productService.findAll());
+        model.addAttribute("cart_id",ProductService.returnPersonFromContext()
+                .getCart().getId());
         return "market/main_page";
     }
     @PostMapping("/search")
@@ -49,10 +54,15 @@ public class ProductController {
         productService.deleteProductById(id);
         return "redirect:/market";
     }
-    @GetMapping("/cart/{id}")
-    public String cartPage(@PathVariable("id") int id, Model model){
+    @GetMapping("/cart")
+    public String cartPage(@RequestParam("id") int id, Model model){
         model.addAttribute("products",productService.findProductsForPersonCart());
         return "market/cart";
+    }
+    @PostMapping("/add_to_cart")
+    public String addProductToCart(@RequestParam("product_id") int idProduct, @RequestParam("cart_id") int idCart) {
+        cartService.addProductToCart(idProduct,idCart);
+        return "redirect:/market";
     }
 
 

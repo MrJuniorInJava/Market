@@ -25,6 +25,12 @@
         <li th:each="property : ${product.properties}" th:text="${property.name + ': ' + property.value}"></li>
     </ul>
 
+    <form th:method="POST" th:action="@{/market/add_to_cart}">
+        <input type="hidden" name="product_id" th:value="${product.getId()}"/>
+        <input type="hidden" name="cart_id" th:value="${cart_id}"/>
+        <button>Добавить товар в корзину</button>
+    </form>
+
     <form th:method="DELETE" th:action="@{/market/delete_product}">
         <input type="hidden" name="id" th:value="${product.getId()}"/>
         <button>Удалить товар</button>
@@ -36,6 +42,12 @@
 <br/>
 <form action="/market/add_product">
     <button>Добавить товар в ленту</button>
+</form>
+<br/>
+<br/>
+<form action="/market/cart">
+    <input type="hidden" name="id" th:value="${cart_id}"/>
+    <button>Корзина</button>
 </form>
 <br/>
 <br/>
