@@ -34,8 +34,8 @@ public class Person {
     private String role;
     @OneToOne(mappedBy = "owner")
     private Cart cart;
-    @OneToMany(mappedBy = "owner", fetch = FetchType.EAGER)
-    private List<Product> products;
+    @OneToMany(mappedBy = "owner")
+    private List<Product> products = new ArrayList<>();
 
     public int getId() {
         return id;
@@ -94,9 +94,6 @@ public class Person {
     }
     public void addProductToPerson(Product product){
         product.setOwner(this);
-        if(this.products==null){
-            this.products=new ArrayList<>();
-        }
         this.products.add(product);
     }
 

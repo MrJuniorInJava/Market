@@ -5,20 +5,24 @@
     <title>Корзина</title>
 </head>
 <body>
-<div th:if="${products.isEmpty()}">
+<div th:if="${cart.getProducts() == null or cart.getProducts().isEmpty()}">
     <p>Вы пока не добавили в корзину ни одного товара</p>
 </div>
-<div th:unless="${products.isEmpty()}" th:each="product : ${products}" >
+<div th:unless="${cart.getProducts() == null or cart.getProducts().isEmpty()}"
+     th:each="product:${cart.getProducts()}" >
     <h3 th:text="${product.name}"></h3>
     <h4>Описание</h4>
     <p th:text="${product.description}"></p>
     <p th:text="'Price: ' + ${product.price}"></p>
     <p th:text="'Продавец: ' + ${product.getOwner().getUsername()}"></p>
-    <form th:method="DELETE" th:action="@{/market/delete_product_from_cart}">
+    <form th:method="UPDATE" th:action="@{/market/cart/{id}/delete_product(id=${cart.getId()})}">
         <input type="hidden" name="product_id" th:value="${product.getId()}"/>
-        <input type="hidden" name="cart_id" th:value="${product.getCart().getId()}"/>
         <button>Удалить товар из корзины</button>
     </form>
 </div>
+<br/>
+<form action="/market">
+    <button>Вернуться в магазин</button>
+</form>
 </body>
 </html>

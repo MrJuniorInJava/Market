@@ -9,6 +9,7 @@ import ru.kolpakov.Market.App.repositories.CartRepository;
 import ru.kolpakov.Market.App.repositories.ProductsRepository;
 
 @Service
+@Transactional(readOnly = true)
 public class CartService {
     private final CartRepository cartRepository;
     private final ProductsRepository productsRepository;
@@ -29,11 +30,12 @@ public class CartService {
     }
     @Transactional
     public void deleteProductFromCart(int idProduct, int idCart) {
-
         Cart cart = cartRepository.findById(idCart).orElse(null);
         Product product = productsRepository.findById(idProduct).orElse(null);
         cart.deleteProductFromCart(product);
-
+    }
+    public Cart findBtId(int id){
+        return  cartRepository.findById(id).orElse(null);
     }
 
 }

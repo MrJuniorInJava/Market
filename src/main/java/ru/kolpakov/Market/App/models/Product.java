@@ -4,6 +4,7 @@ import ru.kolpakov.Market.SecurityForApp.models.Person;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 @Entity
 @Table(name = "Product")
@@ -18,16 +19,18 @@ public class Product {
     private String name;
     @Column(name = "description")
     private String description;
-    @ManyToOne
-    @JoinColumn(name = "cart_id",referencedColumnName = "id")
-    private Cart cart;
+    @ManyToMany()
+    @JoinTable(name = "cart_product",
+    joinColumns = @JoinColumn(name = "product_id"),
+    inverseJoinColumns = @JoinColumn(name = "cart_id"))
+    private List<Cart> carts = new ArrayList<>();
     @ManyToOne()
     @JoinColumn(name = "person_id",referencedColumnName = "id")
     private Person owner;
     @OneToMany(mappedBy = "product")
-    private List<Review> reviews;
+    private List<Review> reviews = new ArrayList<>();
     @OneToMany(mappedBy = "product")
-    private List<Property> properties;
+    private List<Property> properties = new ArrayList<>();
     @Column(name = "created_at")
     private LocalDateTime time;
 
@@ -63,12 +66,12 @@ public class Product {
         this.description = description;
     }
 
-    public Cart getCart() {
-        return cart;
+    public List<Cart> getCarts() {
+        return carts;
     }
 
-    public void setCart(Cart cart) {
-        this.cart = cart;
+    public void setCarts(List<Cart> carts) {
+        this.carts = carts;
     }
 
     public List<Review> getReviews() {

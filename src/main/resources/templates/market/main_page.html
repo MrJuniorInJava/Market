@@ -5,11 +5,10 @@
     <title>Market</title>
 </head>
 <body>
-<h1>Product List</h1>
-<form th:method="POST" th:action="@{/market/search}">
+<h1>Market</h1>
+<form th:method="UPDATE" th:action="@{/market}">
     <label for="name">Введите поисковой запрос</label>
     <input type="text" id="name" name="name"/>
-    <br/>
     <input type="submit" value="Искать!"/>
 </form>
 
@@ -25,9 +24,8 @@
         <li th:each="property : ${product.properties}" th:text="${property.name + ': ' + property.value}"></li>
     </ul>
 
-    <form th:method="POST" th:action="@{/market/add_to_cart}">
+    <form th:method="UPDATE" th:action="@{/market/cart/{id}/add_product(id=${cart_id})}">
         <input type="hidden" name="product_id" th:value="${product.getId()}"/>
-        <input type="hidden" name="cart_id" th:value="${cart_id}"/>
         <button>Добавить товар в корзину</button>
     </form>
 

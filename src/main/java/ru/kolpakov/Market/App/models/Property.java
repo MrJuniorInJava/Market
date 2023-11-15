@@ -1,7 +1,5 @@
 package ru.kolpakov.Market.App.models;
 
-import org.hibernate.mapping.Join;
-
 import javax.persistence.*;
 
 @Entity

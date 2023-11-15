@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.kolpakov.Market.App.models.Product;
 import ru.kolpakov.Market.App.repositories.ProductsRepository;
+import ru.kolpakov.Market.App.utils.GetPerson;
 import ru.kolpakov.Market.SecurityForApp.models.Person;
 import ru.kolpakov.Market.SecurityForApp.security.PersonDetails;
 
@@ -30,12 +31,12 @@ public class ProductService {
     }
 
     public List<Product> findProductsForPersonCart() {
-        return returnPersonFromContext().getCart().getProducts();
+        return GetPerson.returnPersonFromContext().getCart().getProducts();
     }
 
     @Transactional
     public void addProduct(Product product) {
-        returnPersonFromContext().addProductToPerson(product);
+        GetPerson.returnPersonFromContext().addProductToPerson(product);
         product.setTime(LocalDateTime.now());
         productsRepository.save(product);
     }
@@ -54,10 +55,4 @@ public class ProductService {
 
 
     //Вспомогательные методы
-
-    public static Person returnPersonFromContext() {
-        PersonDetails personDetails = (PersonDetails) SecurityContextHolder.getContext()
-                .getAuthentication().getPrincipal();
-        return personDetails.returnPerson();
-    }
 }

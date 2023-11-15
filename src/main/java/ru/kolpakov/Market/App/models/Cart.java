@@ -13,8 +13,8 @@ public class Cart {
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-    @OneToMany(mappedBy = "cart", fetch = FetchType.EAGER)
-    private List<Product> products;
+    @ManyToMany(mappedBy = "carts",fetch = FetchType.EAGER)
+    private List<Product> products = new ArrayList<>();
     @OneToOne(cascade = CascadeType.REMOVE)
     @JoinColumn(name = "person_id", referencedColumnName = "id")
     private Person owner;
@@ -45,14 +45,12 @@ public class Cart {
 //Вспомогательные методы
 
     public void addProductToCart(Product product) {
-        if (this.products == null) {
-            products = new ArrayList<>();
-        }
         this.products.add(product);
-        product.setCart(this);
+        product.getCarts().add(this);
     }
+
     public void deleteProductFromCart(Product product) {
         this.products.remove(product);
-        product.setCart(null);
+        product.getCarts().remove(this);
     }
 }
