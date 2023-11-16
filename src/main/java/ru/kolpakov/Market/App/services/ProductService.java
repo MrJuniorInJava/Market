@@ -33,6 +33,9 @@ public class ProductService {
     public List<Product> findProductsForPersonCart() {
         return GetPerson.returnPersonFromContext().getCart().getProducts();
     }
+    public Product findProductById(int id) {
+        return productsRepository.findById(id).orElse(null);
+    }
 
     @Transactional
     public void addProduct(Product product) {

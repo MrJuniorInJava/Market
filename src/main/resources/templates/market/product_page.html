@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Product</title>
+</head>
+<body>
+<div>
+    <h3 th:text="${product.getName()}"></h3>
+    <h4>Описание</h4>
+    <p th:text="${product.getDescription()}"></p>
+    <p th:text="'Price: ' + ${product.getPrice()}"></p>
+    <p th:text="'Продавец: ' + ${product.getOwner().getUsername()}"></p>
+
+    <h4>Properties:</h4>
+    <ul>
+        <li th:each="property : ${product.getProperties()}" th:text="${property.getName() + ': ' + property.getValue()}"></li>
+    </ul>
+</div>
+</body>
+</html>

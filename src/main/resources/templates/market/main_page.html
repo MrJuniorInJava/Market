@@ -13,15 +13,17 @@
 </form>
 
 <div th:each="product : ${products}">
-    <h3 th:text="${product.name}"></h3>
+    <h3>
+        <a th:text="${product.getName()}" th:href="@{/market/{id}(id=${product.getId()})}">Наименование товара</a>
+    </h3>
     <h4>Описание</h4>
-    <p th:text="${product.description}"></p>
-    <p th:text="'Price: ' + ${product.price}"></p>
+    <p th:text="${product.getDescription()}"></p>
+    <p th:text="'Price: ' + ${product.getPrice()}"></p>
     <p th:text="'Продавец: ' + ${product.getOwner().getUsername()}"></p>
 
     <h4>Properties:</h4>
     <ul>
-        <li th:each="property : ${product.properties}" th:text="${property.name + ': ' + property.value}"></li>
+        <li th:each="property : ${product.getProperties()}" th:text="${property.getName() + ': ' + property.getValue()}"></li>
     </ul>
 
     <form th:method="UPDATE" th:action="@{/market/cart/{id}/add_product(id=${cart_id})}">

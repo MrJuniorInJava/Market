@@ -30,6 +30,11 @@ public class MainController {
                 .getCart().getId());
         return "market/main_page";
     }
+    @GetMapping("/{id}")
+    public String productPage(@PathVariable("id") int id, Model model) {
+        model.addAttribute("product", productService.findProductById(id));
+        return "market/product_page";
+    }
 
     @PostMapping()
     public String searchProduct(@RequestParam(value = "name", required = false) String name,
