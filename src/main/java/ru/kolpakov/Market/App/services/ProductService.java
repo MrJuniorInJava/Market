@@ -33,6 +33,7 @@ public class ProductService {
     public List<Product> findProductsForPersonCart() {
         return GetPerson.returnPersonFromContext().getCart().getProducts();
     }
+
     public Product findProductById(int id) {
         return productsRepository.findById(id).orElse(null);
     }
@@ -56,6 +57,11 @@ public class ProductService {
                 .collect(Collectors.toList());
     }
 
+    @Transactional
+    public void editProduct(int id, Product updatedProduct) {
+        updatedProduct.setId(id);
+        productsRepository.save(updatedProduct);
+    }
 
-    //Вспомогательные методы
+
 }

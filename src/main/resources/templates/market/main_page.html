@@ -14,7 +14,7 @@
 
 <div th:each="product : ${products}">
     <h3>
-        <a th:text="${product.getName()}" th:href="@{/market/{id}(id=${product.getId()})}">Наименование товара</a>
+        <a th:text="${product.getName()}" th:href="@{/market/product/{id}(id=${product.getId()})}">Наименование товара</a>
     </h3>
     <h4>Описание</h4>
     <p th:text="${product.getDescription()}"></p>

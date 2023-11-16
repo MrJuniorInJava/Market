@@ -30,10 +30,18 @@ public class MainController {
                 .getCart().getId());
         return "market/main_page";
     }
-    @GetMapping("/{id}")
+
+    @GetMapping("/product/{id}")
     public String productPage(@PathVariable("id") int id, Model model) {
         model.addAttribute("product", productService.findProductById(id));
         return "market/product_page";
+    }
+
+    @PostMapping("/product/{id}")
+    public String editProduct(@PathVariable("id") int id,
+                              @ModelAttribute("product") Product product) {
+        productService.editProduct(id, product);
+        return "redirect:/market/product/{id}";
     }
 
     @PostMapping()
