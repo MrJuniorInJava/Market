@@ -5,6 +5,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import ru.kolpakov.Market.App.models.Product;
+import ru.kolpakov.Market.App.models.Property;
 import ru.kolpakov.Market.App.services.CartService;
 import ru.kolpakov.Market.App.services.ProductService;
 import ru.kolpakov.Market.App.utils.GetPerson;
@@ -34,6 +35,7 @@ public class MainController {
     @GetMapping("/product/{id}")
     public String productPage(@PathVariable("id") int id, Model model) {
         model.addAttribute("product", productService.findProductById(id));
+        model.addAttribute("newProperty", new Property());
         return "market/product_page";
     }
 
@@ -89,6 +91,13 @@ public class MainController {
                                         @PathVariable("id") int idCart) {
         cartService.deleteProductFromCart(idProduct, idCart);
         return "redirect:/market/cart/{id}";
+    }
+
+    @PostMapping("/product/{id_product}/add_property")
+    public String addProperty(@PathVariable("id_product") int idProduct, @ModelAttribute("newProperty") Property property) {
+        productService.addPropertyToProduct(idProduct,property);
+
+        return "redirect:/market/product/{id_product}";
     }
 
 

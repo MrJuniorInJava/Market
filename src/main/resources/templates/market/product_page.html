@@ -11,7 +11,7 @@
     </h3>
     <form th:method="POST"
           th:action="@{/market/product/{id}(id=${product.getId()})}">
-        Ввести новое имя <textarea rows="4" name="newValue"></textarea>
+        Ввести новое имя <textarea name="newValue"></textarea>
         <input type="hidden" name="fieldName" value="name"/>
         <input type="submit" value="Изменить"/>
     </form>
@@ -20,7 +20,7 @@
         <span th:text="${product.getDescription()}"></span>
     <form th:method="POST"
           th:action="@{/market/product/{id}(id=${product.getId()})}">
-        Ввести новое описание <textarea rows="4" name="newValue"></textarea>
+        Ввести новое описание <textarea name="newValue"></textarea>
         <input type="hidden" name="fieldName" value="description"/>
         <input type="submit" value="Изменить"/>
     </form>
@@ -30,7 +30,7 @@
     </p>
     <form th:method="POST"
           th:action="@{/market/product/{id}(id=${product.getId()})}">
-        Ввести новую цену <textarea rows="1" name="newValue"></textarea>
+        Ввести новую цену <textarea name="newValue"></textarea>
     <input type="hidden" name="fieldName" value="price"/>
         <input type="submit" value="Изменить"/>
     </form>
@@ -39,10 +39,22 @@
         <span th:text=" ${product.getOwner().getUsername()}"></span>
     </p>
 
-    <h4>Properties:</h4>
+    <h4>Характеристики:</h4>
     <ul>
         <li th:each="property : ${product.getProperties()}" th:text="${property.getName() + ': ' + property.getValue()}"></li>
     </ul>
+    <form th:action="@{/market/product/{id_product}/add_property(id_product=${product.getId()})}" method="post"  th:object="${newProperty}">
+        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+
+        <label for="name">Введите название характеристики</label>
+        <input type="text" th:field="*{name}" id="name"/>
+        <br/>
+        <label for="value">Введите значение для характеристики</label>
+        <input type="text" th:field="*{value}" id="value"/>
+        <br/>
+
+        <input type="submit" value="Добавить характеристику к товару"/>
+    </form>
 </div>
 <br/>
 <br/>

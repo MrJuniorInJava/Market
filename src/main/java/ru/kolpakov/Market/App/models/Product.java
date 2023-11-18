@@ -105,4 +105,12 @@ public class Product {
     public void setOwner(Person owner) {
         this.owner = owner;
     }
+
+
+    //Вспомогательные методы
+
+    public void addPropertyToProduct(Property property) {
+        this.properties.add(property);
+        property.setProduct(this);
+    }
 }

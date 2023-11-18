@@ -1,18 +1,16 @@
 package ru.kolpakov.Market.App.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.kolpakov.Market.App.models.Product;
+import ru.kolpakov.Market.App.models.Property;
 import ru.kolpakov.Market.App.repositories.ProductsRepository;
+import ru.kolpakov.Market.App.repositories.PropertiesRepository;
 import ru.kolpakov.Market.App.utils.GetPerson;
-import ru.kolpakov.Market.SecurityForApp.models.Person;
-import ru.kolpakov.Market.SecurityForApp.security.PersonDetails;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
@@ -20,10 +18,12 @@ import java.util.stream.Collectors;
 @Transactional(readOnly = true)
 public class ProductService {
     private final ProductsRepository productsRepository;
+    private final PropertiesRepository propertiesRepository;
 
     @Autowired
-    public ProductService(ProductsRepository productsRepository) {
+    public ProductService(ProductsRepository productsRepository, PropertiesRepository propertiesRepository) {
         this.productsRepository = productsRepository;
+        this.propertiesRepository = propertiesRepository;
     }
 
     public List<Product> findAll() {
@@ -72,6 +72,11 @@ public class ProductService {
 
         }
         productsRepository.save(currentProduct);
+    }
+    @Transactional
+    public void addPropertyToProduct(int idProduct, Property property){
+        propertiesRepository.save(property);
+        productsRepository.findById(idProduct).get().addPropertyToProduct(property);
     }
 
 
