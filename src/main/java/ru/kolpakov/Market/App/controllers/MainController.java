@@ -38,9 +38,10 @@ public class MainController {
     }
 
     @PostMapping("/product/{id}")
-    public String editProduct(@PathVariable("id") int id,
-                              @ModelAttribute("product") Product product) {
-        productService.editProduct(id, product);
+    public String updateField(@PathVariable("id") int id,
+                              @RequestParam("fieldName") String fieldName,
+                              @RequestParam("newValue") String newValue) {
+        productService.updateProductField(id, fieldName, newValue);
         return "redirect:/market/product/{id}";
     }
 

@@ -56,11 +56,22 @@ public class ProductService {
                 .filter(object -> pattern.matcher(object.getName()).find())
                 .collect(Collectors.toList());
     }
-
     @Transactional
-    public void editProduct(int id, Product updatedProduct) {
-        updatedProduct.setId(id);
-        productsRepository.save(updatedProduct);
+    public void updateProductField(int id, String fieldName, String newValue) {
+        Product currentProduct = productsRepository.findById(id).get();
+        switch (fieldName) {
+            case "name":
+                currentProduct.setName(newValue);
+                break;
+            case "description":
+                currentProduct.setDescription(newValue);
+                break;
+            case "price":
+                currentProduct.setPrice(Integer.parseInt(newValue));
+                break;
+
+        }
+        productsRepository.save(currentProduct);
     }
 
 

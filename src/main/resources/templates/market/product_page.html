@@ -6,16 +6,48 @@
 </head>
 <body>
 <div>
-    <h3 th:text="${product.getName()}"></h3>
-    <h4>Описание</h4>
-    <p th:text="${product.getDescription()}"></p>
-    <p th:text="'Price: ' + ${product.getPrice()}"></p>
-    <p th:text="'Продавец: ' + ${product.getOwner().getUsername()}"></p>
+    <h3>
+        <span th:text="${product.getName()}"></span>
+    </h3>
+    <form th:method="POST"
+          th:action="@{/market/product/{id}(id=${product.getId()})}">
+        Ввести новое имя <textarea rows="4" name="newValue"></textarea>
+        <input type="hidden" name="fieldName" value="name"/>
+        <input type="submit" value="Изменить"/>
+    </form>
+
+    <h4>Описание:</h4>
+        <span th:text="${product.getDescription()}"></span>
+    <form th:method="POST"
+          th:action="@{/market/product/{id}(id=${product.getId()})}">
+        Ввести новое описание <textarea rows="4" name="newValue"></textarea>
+        <input type="hidden" name="fieldName" value="description"/>
+        <input type="submit" value="Изменить"/>
+    </form>
+
+    <p>Цена:
+        <span th:text="${product.getPrice()}"></span>
+    </p>
+    <form th:method="POST"
+          th:action="@{/market/product/{id}(id=${product.getId()})}">
+        Ввести новую цену <textarea rows="1" name="newValue"></textarea>
+    <input type="hidden" name="fieldName" value="price"/>
+        <input type="submit" value="Изменить"/>
+    </form>
+
+    <p>Продавец:
+        <span th:text=" ${product.getOwner().getUsername()}"></span>
+    </p>
 
     <h4>Properties:</h4>
     <ul>
         <li th:each="property : ${product.getProperties()}" th:text="${property.getName() + ': ' + property.getValue()}"></li>
     </ul>
 </div>
+<br/>
+<br/>
+<form action="/market">
+    <button>Вернуться в магазин</button>
+</form>
 </body>
 </html>
