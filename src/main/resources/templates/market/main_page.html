@@ -19,8 +19,8 @@
     <h4>Описание</h4>
     <p th:text="${product.getDescription()}"></p>
     <h4>Цена: </h4>
-    <a th:text="${product.getPrice()}"></a>
-    <h4 >Продавец: </h4>
+    <a th:text="${product.getPrice()} + ' руб'"></a>
+    <h4  >Продавец: </h4>
     <a th:text="${product.getOwner().getUsername()}"></a>
 
     <h4>Характеристики:</h4>
@@ -48,7 +48,7 @@
 </form>
 <br/>
 <br/>
-<form th:action="@{/market/cart/{id}(id=${cart_id})}">
+<form th:action="@{/market/cart/{id}(id=${user.getCart().getId()})}">
     <button>Корзина</button>
 </form>
 <br/>

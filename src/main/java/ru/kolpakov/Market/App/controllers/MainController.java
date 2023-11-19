@@ -53,6 +53,7 @@ public class MainController {
     public String searchProduct(@RequestParam(value = "name", required = false) String name,
                                 Model model) {
         model.addAttribute("products", productService.searchByFirstChars(name));
+        model.addAttribute("user",GetPerson.returnPersonFromContext());
         return "market/main_page";
     }
     @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_SELLER')")
