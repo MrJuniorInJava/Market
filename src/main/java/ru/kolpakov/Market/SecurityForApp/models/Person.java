@@ -8,6 +8,7 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,6 +24,11 @@ public class Person {
     @NotNull
     @Size(min = 2, max = 70, message = "Имя должно иметь количество символов от 2 до 70")
     private String username;
+    @Column(name = "login")
+    @NotEmpty
+    @NotNull
+    @Size(min = 2, max = 70, message = "Имя должно иметь количество символов от 2 до 70")
+    private String login;
     @Column(name = "year_of_birth")
     @Min(value = 1900, message = "Год рождения должен иметь значение выше 1900")
     private int yearOfBirth;
@@ -32,6 +38,8 @@ public class Person {
     private String password;
     @Column(name = "role")
     private String role;
+    @Column(name = "date_reg")
+    private LocalDateTime dateOfRegistration;
     @OneToOne(mappedBy = "owner")
     private Cart cart;
     @OneToMany(mappedBy = "owner")
@@ -77,6 +85,22 @@ public class Person {
         this.role = role;
     }
 
+    public String getLogin() {
+        return login;
+    }
+
+    public void setLogin(String login) {
+        this.login = login;
+    }
+
+    public LocalDateTime getDateOfRegistration() {
+        return dateOfRegistration;
+    }
+
+    public void setDateOfRegistration(LocalDateTime dateOfRegistration) {
+        this.dateOfRegistration = dateOfRegistration;
+    }
+
     public Cart getCart() {
         return cart;
     }
@@ -102,9 +126,12 @@ public class Person {
         return "Person{" +
                 "id=" + id +
                 ", username='" + username + '\'' +
+                ", login='" + login + '\'' +
                 ", yearOfBirth=" + yearOfBirth +
                 ", password='" + password + '\'' +
                 ", role='" + role + '\'' +
+                ", cart=" + cart +
+                ", products=" + products +
                 '}';
     }
 }

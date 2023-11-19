@@ -11,11 +11,11 @@
     <form class="form_auth_style" action="/process_login" method="post" id="username">
       <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
 
-      <label>Введите ваше имя пользователя</label>
+      <label>Логин</label>
       <br/>
-      <input type="text" name="username" placeholder="Введите имя" required >
+      <input type="text" name="login" placeholder="Введите логин" required >
       <br/>
-      <label>Введите Ваш пароль</label>
+      <label>Пароль</label>
       <br/>
       <input type="password" name="password" placeholder="Введите пароль" required id="password" >
       <br/>

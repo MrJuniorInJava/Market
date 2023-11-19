@@ -24,16 +24,17 @@
     <a th:text="${product.getOwner().getUsername()}"></a>
 
     <h4>Характеристики:</h4>
-    <ul>
-        <li th:each="property : ${product.getProperties()}" th:text="${property.getName() + ': ' + property.getValue()}"></li>
-    </ul>
+    <div th:if="${product.getProperties().isEmpty()}">Характеристики пока не указаны</div>
+    <div th:unless="${product.getProperties().isEmpty()}" th:each="property : ${product.getProperties()}">
+        <a th:text="${property.getName() + ': ' + property.getValue()}" >Характеристика</a>
+    </div>
 
-    <form th:method="UPDATE" th:action="@{/market/cart/{id}/add_product(id=${cart_id})}">
+    <form th:method="UPDATE" th:action="@{/market/cart/{id}/add_product(id=${user.getCart().getId()})}">
         <input type="hidden" name="product_id" th:value="${product.getId()}"/>
         <button>Добавить товар в корзину</button>
     </form>
 
-    <form th:method="DELETE" th:action="@{/market/delete_product}">
+    <form th:if="${user.getRole()=='ROLE_ADMIN' or user.getRole()=='ROLE_SELLER'}" th:method="DELETE" th:action="@{/market/delete_product}">
         <input type="hidden" name="id" th:value="${product.getId()}"/>
         <button>Удалить товар</button>
     </form>
@@ -42,7 +43,7 @@
 <br/>
 <br/>
 <br/>
-<form action="/market/add_product">
+<form th:if="${user.getRole()=='ROLE_ADMIN' or user.getRole()=='ROLE_SELLER'}" action="/market/add_product">
     <button>Добавить товар в ленту</button>
 </form>
 <br/>

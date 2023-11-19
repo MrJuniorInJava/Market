@@ -1,6 +1,7 @@
 package ru.kolpakov.Market.App.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -9,6 +10,7 @@ import ru.kolpakov.Market.App.models.Property;
 import ru.kolpakov.Market.App.services.CartService;
 import ru.kolpakov.Market.App.services.ProductService;
 import ru.kolpakov.Market.App.utils.GetPerson;
+import ru.kolpakov.Market.SecurityForApp.models.Person;
 
 import java.util.Collections;
 
@@ -27,8 +29,7 @@ public class MainController {
     @GetMapping()
     public String mainPage(Model model) {
         model.addAttribute("products", productService.findAll());
-        model.addAttribute("cart_id", GetPerson.returnPersonFromContext()
-                .getCart().getId());
+        model.addAttribute("user", GetPerson.returnPersonFromContext());
         return "market/main_page";
     }
 
@@ -36,6 +37,7 @@ public class MainController {
     public String productPage(@PathVariable("id") int id, Model model) {
         model.addAttribute("product", productService.findProductById(id));
         model.addAttribute("newProperty", new Property());
+        model.addAttribute("user",GetPerson.returnPersonFromContext());
         return "market/product_page";
     }
 
@@ -53,7 +55,7 @@ public class MainController {
         model.addAttribute("products", productService.searchByFirstChars(name));
         return "market/main_page";
     }
-
+    @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_SELLER')")
     @GetMapping("/add_product")
     public String addProductPage(Model model) {
         model.addAttribute("product", new Product());
@@ -75,7 +77,7 @@ public class MainController {
 
     @GetMapping("/cart/{id}")
     public String cartPage(@PathVariable("id") int id, Model model) {
-        model.addAttribute("cart", cartService.findBtId(id));
+        model.addAttribute("cart", cartService.findById(id));
         return "market/cart";
     }
 

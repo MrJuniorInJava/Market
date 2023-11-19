@@ -34,7 +34,7 @@ public class CartService {
         Product product = productsRepository.findById(idProduct).orElse(null);
         cart.deleteProductFromCart(product);
     }
-    public Cart findBtId(int id){
+    public Cart findById(int id){
         return  cartRepository.findById(id).orElse(null);
     }
 

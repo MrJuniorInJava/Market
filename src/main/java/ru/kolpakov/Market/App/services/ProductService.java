@@ -1,6 +1,7 @@
 package ru.kolpakov.Market.App.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.kolpakov.Market.App.models.Product;
@@ -39,6 +40,7 @@ public class ProductService {
     }
 
     @Transactional
+    @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_SELLER')")
     public void addProduct(Product product) {
         GetPerson.returnPersonFromContext().addProductToPerson(product);
         product.setTime(LocalDateTime.now());
@@ -46,6 +48,7 @@ public class ProductService {
     }
 
     @Transactional
+    @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_SELLER')")
     public void deleteProductById(int id) {
         productsRepository.deleteById(id);
     }
@@ -57,6 +60,7 @@ public class ProductService {
                 .collect(Collectors.toList());
     }
     @Transactional
+    @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_SELLER')")
     public void updateProductField(int id, String fieldName, String newValue) {
         Product currentProduct = productsRepository.findById(id).get();
         switch (fieldName) {
@@ -74,11 +78,13 @@ public class ProductService {
         productsRepository.save(currentProduct);
     }
     @Transactional
+    @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_SELLER')")
     public void addPropertyToProduct(int idProduct, Property property){
         propertiesRepository.save(property);
         productsRepository.findById(idProduct).get().addPropertyToProduct(property);
     }
     @Transactional
+    @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_SELLER')")
     public void deletePropertyFromProduct(int id){
         propertiesRepository.deleteById(id);
     }

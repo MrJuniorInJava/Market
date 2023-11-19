@@ -14,6 +14,10 @@
     <input type="text" th:field="*{yearOfBirth}" id="yearOfBirth"/>
     <div style="color: red" th:if="${#fields.hasErrors('yearOfBirth')}" th:errors="*{yearOfBirth}">Date of birth Error</div>
     <br/>
+    <label for="login">Введите логин</label>
+    <input type="text" th:field="*{login}" id="login"/>
+    <div style="color: red" th:if="${#fields.hasErrors('login')}" th:errors="*{username}">username Error</div>
+    <br/>
     <label for="password">Введите пароль</label>
     <input type="text" th:field="*{password}" id="password"/>
     <div style="color: red" th:if="${#fields.hasErrors('password')}" th:errors="*{password}">password Error</div>
