@@ -13,7 +13,7 @@ public class Cart {
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-    @ManyToMany(mappedBy = "carts",fetch = FetchType.EAGER)
+    @ManyToMany(mappedBy = "carts", fetch = FetchType.EAGER)
     private List<Product> products = new ArrayList<>();
     @OneToOne(cascade = CascadeType.REMOVE)
     @JoinColumn(name = "person_id", referencedColumnName = "id")

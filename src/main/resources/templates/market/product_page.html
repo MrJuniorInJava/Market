@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:margin-right="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
     <title>Product</title>
@@ -40,9 +40,14 @@
     </p>
 
     <h4>Характеристики:</h4>
-    <ul>
-        <li th:each="property : ${product.getProperties()}" th:text="${property.getName() + ': ' + property.getValue()}"></li>
-    </ul>
+
+        <div th:each="property : ${product.getProperties()}" style="display: flex; align-items: baseline;">
+            <a th:text="${property.getName() + ': ' + property.getValue()}" >Характеристика</a>
+            <form th:action="@{/market/product/{id_product}/delete_property(id_product=${product.getId()})}" th:method="DELETE">
+                <input type="hidden" th:name="id" th:value="${property.getId()}"/>
+                <input type="submit" value="Удалить характеристику товара" style="margin-left: 10px;"/>
+            </form>
+        </div>
     <form th:action="@{/market/product/{id_product}/add_property(id_product=${product.getId()})}" method="post"  th:object="${newProperty}">
         <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
 

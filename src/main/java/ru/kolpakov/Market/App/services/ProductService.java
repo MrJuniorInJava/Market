@@ -78,6 +78,10 @@ public class ProductService {
         propertiesRepository.save(property);
         productsRepository.findById(idProduct).get().addPropertyToProduct(property);
     }
+    @Transactional
+    public void deletePropertyFromProduct(int id){
+        propertiesRepository.deleteById(id);
+    }
 
 
 }

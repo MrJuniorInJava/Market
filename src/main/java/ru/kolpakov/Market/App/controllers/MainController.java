@@ -99,6 +99,12 @@ public class MainController {
 
         return "redirect:/market/product/{id_product}";
     }
+    @PostMapping("/product/{id_product}/delete_property")
+    public String deleteProperty(@PathVariable("id_product") int idProduct, @RequestParam int id) {
+        productService.deletePropertyFromProduct(id);
+
+        return "redirect:/market/product/{id_product}";
+    }
 
 
 }

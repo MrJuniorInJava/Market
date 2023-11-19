@@ -29,7 +29,7 @@ public class Product {
     private Person owner;
     @OneToMany(mappedBy = "product")
     private List<Review> reviews = new ArrayList<>();
-    @OneToMany(mappedBy = "product")
+    @OneToMany(mappedBy = "product",cascade = CascadeType.REMOVE)
     private List<Property> properties = new ArrayList<>();
     @Column(name = "created_at")
     private LocalDateTime time;
