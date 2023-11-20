@@ -1,6 +1,7 @@
 package ru.kolpakov.Market.App.models;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "Review")
@@ -19,7 +20,9 @@ public class Review {
     private String advantages;
     @Column(name = "comment")
     private String comment;
-    @ManyToOne()
+    @Column(name = "created_at")
+    private LocalDateTime createdAt;
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "product_id", referencedColumnName = "id")
     private Product product;
 
@@ -69,6 +72,14 @@ public class Review {
 
     public void setComment(String comment) {
         this.comment = comment;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
     }
 
     public Product getProduct() {

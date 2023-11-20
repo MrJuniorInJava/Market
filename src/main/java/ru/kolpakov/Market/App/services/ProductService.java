@@ -6,8 +6,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.kolpakov.Market.App.models.Product;
 import ru.kolpakov.Market.App.models.Property;
+import ru.kolpakov.Market.App.models.Review;
 import ru.kolpakov.Market.App.repositories.ProductsRepository;
 import ru.kolpakov.Market.App.repositories.PropertiesRepository;
+import ru.kolpakov.Market.App.repositories.ReviewsRepository;
 import ru.kolpakov.Market.App.utils.GetPerson;
 
 import java.time.LocalDateTime;
@@ -20,11 +22,13 @@ import java.util.stream.Collectors;
 public class ProductService {
     private final ProductsRepository productsRepository;
     private final PropertiesRepository propertiesRepository;
+    private final ReviewsRepository reviewsRepository;
 
     @Autowired
-    public ProductService(ProductsRepository productsRepository, PropertiesRepository propertiesRepository) {
+    public ProductService(ProductsRepository productsRepository, PropertiesRepository propertiesRepository, ReviewsRepository reviewsRepository) {
         this.productsRepository = productsRepository;
         this.propertiesRepository = propertiesRepository;
+        this.reviewsRepository = reviewsRepository;
     }
 
     public List<Product> findAll() {
@@ -59,6 +63,7 @@ public class ProductService {
                 .filter(object -> pattern.matcher(object.getName()).find())
                 .collect(Collectors.toList());
     }
+
     @Transactional
     @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_SELLER')")
     public void updateProductField(int id, String fieldName, String newValue) {
@@ -77,17 +82,30 @@ public class ProductService {
         }
         productsRepository.save(currentProduct);
     }
+
     @Transactional
     @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_SELLER')")
-    public void addPropertyToProduct(int idProduct, Property property){
+    public void addPropertyToProduct(int idProduct, Property property) {
         propertiesRepository.save(property);
         productsRepository.findById(idProduct).get().addPropertyToProduct(property);
     }
+
     @Transactional
     @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_SELLER')")
-    public void deletePropertyFromProduct(int id){
+    public void deletePropertyFromProduct(int id) {
         propertiesRepository.deleteById(id);
     }
 
+    @Transactional
+    public void addReviewToProduct(int idProduct, Review review) {
+        review.setCreatedAt(LocalDateTime.now());
+        reviewsRepository.save(review);
+        productsRepository.findById(idProduct).get().addReviewToProduct(review);
+    }
+    @Transactional
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    public void deleteReviewFromProduct(int id) {
+        reviewsRepository.deleteById(id);
+    }
 
 }

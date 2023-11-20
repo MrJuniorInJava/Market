@@ -113,4 +113,8 @@ public class Product {
         this.properties.add(property);
         property.setProduct(this);
     }
+    public void addReviewToProduct(Review review) {
+        this.reviews.add(review);
+        review.setProduct(this);
+    }
 }
