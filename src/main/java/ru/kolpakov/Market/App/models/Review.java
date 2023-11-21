@@ -1,5 +1,7 @@
 package ru.kolpakov.Market.App.models;
 
+import ru.kolpakov.Market.SecurityForApp.models.Person;
+
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
@@ -22,9 +24,12 @@ public class Review {
     private String comment;
     @Column(name = "created_at")
     private LocalDateTime createdAt;
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne()
     @JoinColumn(name = "product_id", referencedColumnName = "id")
     private Product product;
+    @ManyToOne()
+    @JoinColumn(name = "person_id", referencedColumnName = "id")
+    private Person owner;
 
     public int getId() {
         return id;
@@ -88,5 +93,13 @@ public class Review {
 
     public void setProduct(Product product) {
         this.product = product;
+    }
+
+    public Person getOwner() {
+        return owner;
+    }
+
+    public void setOwner(Person owner) {
+        this.owner = owner;
     }
 }

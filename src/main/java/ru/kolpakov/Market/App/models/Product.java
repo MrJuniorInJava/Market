@@ -19,6 +19,8 @@ public class Product {
     private String name;
     @Column(name = "description")
     private String description;
+    @Column(name = "avg_rating")
+    private double avgRating;
     @ManyToMany()
     @JoinTable(name = "cart_product",
     joinColumns = @JoinColumn(name = "product_id"),
@@ -64,6 +66,14 @@ public class Product {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public double getAvgRating() {
+        return avgRating;
+    }
+
+    public void setAvgRating(double avgRating) {
+        this.avgRating = avgRating;
     }
 
     public List<Cart> getCarts() {

@@ -98,9 +98,14 @@ public class ProductService {
 
     @Transactional
     public void addReviewToProduct(int idProduct, Review review) {
+        Product product = productsRepository.findById(idProduct).get();
+        double sumRating = product.getReviews().stream().mapToDouble(Review::getRating).sum();
+        double n =product.getReviews().size();
+        product.setAvgRating(sumRating/n);
         review.setCreatedAt(LocalDateTime.now());
+        review.setOwner(GetPerson.returnPersonFromContext());
         reviewsRepository.save(review);
-        productsRepository.findById(idProduct).get().addReviewToProduct(review);
+        product.addReviewToProduct(review);
     }
     @Transactional
     @PreAuthorize("hasRole('ROLE_ADMIN')")

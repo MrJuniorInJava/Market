@@ -2,6 +2,7 @@ package ru.kolpakov.Market.SecurityForApp.models;
 
 import ru.kolpakov.Market.App.models.Cart;
 import ru.kolpakov.Market.App.models.Product;
+import ru.kolpakov.Market.App.models.Review;
 
 import javax.persistence.*;
 import javax.validation.constraints.Min;
@@ -44,6 +45,8 @@ public class Person {
     private Cart cart;
     @OneToMany(mappedBy = "owner")
     private List<Product> products = new ArrayList<>();
+    @OneToMany(mappedBy = "owner")
+    private List<Review> reviews = new ArrayList<>();
 
     public int getId() {
         return id;
@@ -116,6 +119,19 @@ public class Person {
     public void setProducts(List<Product> products) {
         this.products = products;
     }
+
+    public List<Review> getReviews() {
+        return reviews;
+    }
+
+    public void setReviews(List<Review> reviews) {
+        this.reviews = reviews;
+    }
+    public void addReviewToPerson(Review review){
+        review.setOwner(this);
+        this.reviews.add(review);
+    }
+
     public void addProductToPerson(Product product){
         product.setOwner(this);
         this.products.add(product);
