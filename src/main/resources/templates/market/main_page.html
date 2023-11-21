@@ -3,6 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <title>Market</title>
+    <style>
+        .gold-star1 {
+            color: gold;
+            cursor: pointer;
+            font-size: 1.4em;
+        }
+    </style>
 </head>
 <body>
 <h1>Market</h1>
@@ -16,6 +23,10 @@
     <h3>
         <a th:text="${product.getName()}" th:href="@{/market/product/{id}(id=${product.getId()})}">Наименование товара</a>
     </h3>
+    <p>
+        <span class="gold-star1" >★</span>
+        <span style="font-size: 1.25em;" th:text="${product.getAvgRating() + '/5'}"></span>
+    </p>
     <h4>Описание</h4>
     <p th:text="${product.getDescription()}"></p>
     <h4>Цена: </h4>

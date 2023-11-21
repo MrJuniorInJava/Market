@@ -84,6 +84,12 @@
             text-decoration: none;
             cursor: pointer;
         }
+        .gold-star1 {
+            color: gold;
+            cursor: pointer;
+            font-size: 2em;
+        }
+
 
 
     </style>
@@ -91,8 +97,13 @@
 <body>
 <div>
     <h3>
-        <span th:text="${product.getName()}"></span>
+        <span th:text="${product.getName()}">Название продукта</span>
     </h3>
+    <p>
+        <span class="gold-star1" >★</span>
+        <span style="font-size: 1.7em;" th:text="${product.getAvgRating() + '/5'}"></span>
+    </p>
+
     <form th:if="${user.getRole()=='ROLE_ADMIN' or user.getRole()=='ROLE_SELLER'}" th:method="POST"
           th:action="@{/market/product/{id}(id=${product.getId()})}">
         Ввести новое имя <textarea name="newValue"></textarea>
@@ -155,15 +166,12 @@
     <form th:action="@{/market/product/{id_product}/add_review(id_product=${product.getId()})}" method="post"
           th:object="${newReview}" onsubmit="return false;" id="reviewForm">
 
-        <!-- Добавлена кнопка для открытия модального окна -->
         <button id="openModal" onclick="openModal()">Добавить отзыв</button>
 
-        <!-- Модальное окно -->
         <div id="myModal" class="modal">
             <div class="modal-content">
                 <span class="close" onclick="closeModal()">&times;</span>
 
-                <!-- Твой блок кода для отзывов и рейтинга -->
                 <label for="advantages">Введите достоинства</label>
                 <input type="text" th:field="*{advantages}" id="advantages"/>
                 <br/>

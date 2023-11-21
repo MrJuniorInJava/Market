@@ -101,7 +101,8 @@ public class ProductService {
         Product product = productsRepository.findById(idProduct).get();
         double sumRating = product.getReviews().stream().mapToDouble(Review::getRating).sum();
         double n =product.getReviews().size();
-        product.setAvgRating(sumRating/n);
+        double avgRating = sumRating/n;
+        product.setAvgRating((Math.round(avgRating*10))/10.0);
         review.setCreatedAt(LocalDateTime.now());
         review.setOwner(GetPerson.returnPersonFromContext());
         reviewsRepository.save(review);
