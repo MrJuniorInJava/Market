@@ -58,7 +58,6 @@
             width: 100%;
             height: 100%;
             overflow: auto;
-            background-color: rgb(0,0,0);
             background-color: rgba(0,0,0,0.4);
             padding-top: 60px;
         }
@@ -89,7 +88,26 @@
             cursor: pointer;
             font-size: 2em;
         }
+        #confirmationModal {
+            display: none;
+            position: fixed;
+            z-index: 2;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.4);
+            padding-top: 60px;
+        }
 
+        #confirmationModal .modal-content {
+            background-color: #fefefe;
+            margin: 15% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 40%;
+        }
 
 
     </style>
@@ -229,7 +247,7 @@
         </div></a>
         <form th:if="${user.getRole()=='ROLE_ADMIN' or user.getId()==review.getOwner().getId()}"
               th:action="@{/market/product/{id_product}/delete_review(id_product=${product.getId()})}"
-              th:method="DELETE">
+              th:method="POST" class="delete-review-form">
             <input type="hidden" th:name="id" th:value="${review.getId()}"/>
             <input type="hidden" th:name="login" th:value="${review.getOwner().getLogin()}"/>
             <input type="submit" value="Удалить отзыв" style="margin-left: 10px;"/>
@@ -242,27 +260,107 @@
 <form action="/market">
     <button>Вернуться в магазин</button>
 </form>
+<div id="confirmationModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeConfirmationModal()">&times;</span>
+        <p id="confirmationMessage">Ваш отзыв успешно отправлен!</p>
+    </div>
+</div>
 <script>
     var modal = document.getElementById('myModal');
     var btn = document.getElementById('openModal');
 
-    btn.onclick = function() {
+    btn.onclick = function () {
         modal.style.display = 'block';
         document.getElementById('reviewForm').reset();
+        centerModal();
     };
 
     function closeModal() {
         modal.style.display = 'none';
     }
+
     function submitReviewForm() {
-        document.getElementById('reviewForm').submit();
+        var formData = new FormData(document.getElementById('reviewForm'));
+        var xhr = new XMLHttpRequest();
+
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState === 4) {
+                if (xhr.status === 200) {
+                    closeModal();
+                    showReviewConfirmation();
+                } else {
+                    // Обработка ошибок при отправке формы, если нужно
+                }
+            }
+        };
+
+        xhr.open('POST', document.getElementById('reviewForm').action, true);
+        xhr.send(formData);
     }
 
-    window.onclick = function(event) {
+    function showReviewConfirmation() {
+        var confirmationModal = document.getElementById('confirmationModal');
+        confirmationModal.style.display = 'block';
+        centerConfirmationModal();
+        setTimeout(function () {
+            closeConfirmationModal();
+        }, 5000);
+    }
+
+    function closeConfirmationModal() {
+        var confirmationModal = document.getElementById('confirmationModal');
+        confirmationModal.style.display = 'none';
+    }
+    function centerConfirmationModal() {
+        var confirmationModalContent = document.querySelector('#confirmationModal .modal-content');
+        confirmationModalContent.style.marginTop = (window.innerHeight - confirmationModalContent.offsetHeight) / 2 + 'px';
+    }
+
+    function openModal() {
+        modal.style.display = 'block';
+        document.getElementById('advantages').value = '';
+        document.getElementById('flaws').value = '';
+        document.getElementById('comment').value = '';
+
+        var ratingInputs = document.getElementsByName('rating');
+        for (var i = 0; i < ratingInputs.length; i++) {
+            ratingInputs[i].checked = false;
+        }
+
+        centerModal();
+    }
+
+    function centerModal() {
+        var modalContent = document.querySelector('.modal-content');
+        modalContent.style.marginTop = (window.innerHeight - modalContent.offsetHeight) / 2 + 'px';
+    }
+
+    window.onclick = function (event) {
         if (event.target === modal) {
             modal.style.display = 'none';
         }
     };
+
+    var deleteForms = document.getElementsByClassName('delete-review-form');
+    for (var i = 0; i < deleteForms.length; i++) {
+        deleteForms[i].addEventListener('submit', function (event) {
+            localStorage.setItem('scrollPosition', window.scrollY || document.documentElement.scrollTop);
+        });
+    }
+
+    window.onload = function () {
+        var scrollPosition = localStorage.getItem('scrollPosition');
+        if (scrollPosition) {
+            window.scrollTo(0, parseInt(scrollPosition));
+            localStorage.removeItem('scrollPosition');
+        }
+    };
+
+    window.onresize = function () {
+        centerModal(); // Пересчет положения при изменении размера окна
+    };
 </script>
+
 </body>
 </html>
