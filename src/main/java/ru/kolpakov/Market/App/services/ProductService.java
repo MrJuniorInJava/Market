@@ -92,26 +92,34 @@ public class ProductService {
 
     @Transactional
     @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_SELLER')")
-    public void deletePropertyFromProduct(int id) {
-        propertiesRepository.deleteById(id);
+    public void deletePropertyFromProduct(int id, int idProduct) {
+        Property property = propertiesRepository.findById(id).get();
+        productsRepository.findById(idProduct).get().getProperties().remove(property);
+        propertiesRepository.delete(property);
     }
 
     @Transactional
     public void addReviewToProduct(int idProduct, Review review) {
         Product product = productsRepository.findById(idProduct).get();
-        double sumRating = product.getReviews().stream().mapToDouble(Review::getRating).sum();
-        double n =product.getReviews().size();
-        double avgRating = sumRating/n;
-        product.setAvgRating((Math.round(avgRating*10))/10.0);
         review.setCreatedAt(LocalDateTime.now());
         review.setOwner(GetPerson.returnPersonFromContext());
         reviewsRepository.save(review);
         product.addReviewToProduct(review);
+        double sumRating = product.getReviews().stream().mapToDouble(Review::getRating).sum();
+        double n =product.getReviews().size();
+        double avgRating = sumRating/n;
+        product.setAvgRating((Math.round(avgRating*10))/10.0);
     }
     @Transactional
     @PreAuthorize("hasRole('ROLE_ADMIN') or #login==principal.username")
-    public void deleteReviewFromProduct(int id, String login) {
+    public void deleteReviewFromProduct(int idProduct, int id, String login) {
+        Product product = productsRepository.findById(idProduct).get();
+        product.getReviews().remove(reviewsRepository.findById(id).get());
         reviewsRepository.deleteById(id);
+        double sumRating = product.getReviews().stream().mapToDouble(Review::getRating).sum();
+        double n =product.getReviews().size();
+        double avgRating = sumRating/n;
+        product.setAvgRating((Math.round(avgRating*10))/10.0);
     }
 
 }

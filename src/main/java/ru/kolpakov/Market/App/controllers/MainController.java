@@ -108,7 +108,7 @@ public class MainController {
     }
     @PostMapping("/product/{id_product}/delete_property")
     public String deleteProperty(@PathVariable("id_product") int idProduct, @RequestParam int id) {
-        productService.deletePropertyFromProduct(id);
+        productService.deletePropertyFromProduct(id, idProduct);
 
         return "redirect:/market/product/{id_product}";
     }
@@ -121,7 +121,7 @@ public class MainController {
     @PostMapping("/product/{id_product}/delete_review")
     public String deleteReview(@PathVariable("id_product") int idProduct, @RequestParam("id") int id,
                                @RequestParam("login") String login) {
-        productService.deleteReviewFromProduct(id, login);
+        productService.deleteReviewFromProduct(idProduct, id, login);
 
         return "redirect:/market/product/{id_product}";
     }
