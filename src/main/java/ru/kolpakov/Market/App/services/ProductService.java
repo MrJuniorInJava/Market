@@ -109,8 +109,8 @@ public class ProductService {
         product.addReviewToProduct(review);
     }
     @Transactional
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
-    public void deleteReviewFromProduct(int id) {
+    @PreAuthorize("hasRole('ROLE_ADMIN') or #login==principal.username")
+    public void deleteReviewFromProduct(int id, String login) {
         reviewsRepository.deleteById(id);
     }
 

@@ -227,10 +227,11 @@
             <span th:unless="${i le review.getRating()}" class="gray-star">★</span>
         </span>
         </div></a>
-        <form th:if="${user.getRole()=='ROLE_ADMIN'}"
+        <form th:if="${user.getRole()=='ROLE_ADMIN' or user.getId()==review.getOwner().getId()}"
               th:action="@{/market/product/{id_product}/delete_review(id_product=${product.getId()})}"
               th:method="DELETE">
             <input type="hidden" th:name="id" th:value="${review.getId()}"/>
+            <input type="hidden" th:name="login" th:value="${review.getOwner().getLogin()}"/>
             <input type="submit" value="Удалить отзыв" style="margin-left: 10px;"/>
         </form>
         <br/>
