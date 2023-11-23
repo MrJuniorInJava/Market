@@ -117,6 +117,19 @@
     <h3>
         <span th:text="${product.getName()}">Название продукта</span>
     </h3>
+    <div>
+        <div th:if="${product.getImages().isEmpty()}">
+            <p>У товара нет картинки</p>
+        </div>
+        <div th:unless="${product.getImages().isEmpty()}" th:each="image : ${product.getImages()}">
+            <img th:src="@{/market/images/{id}(id = ${image.getId()})}" height="300px" alt=""/>
+        </div>
+    </div>
+    <form th:if="${user.getRole()=='ROLE_ADMIN' or user.getRole()=='ROLE_SELLER'}" th:method="POST"
+          th:action="@{/market/product/{id}/add_image(id=${product.getId()})}" enctype="multipart/form-data">
+        Добавить изображение <input type="file" name="file" multiple/>
+        <input type="submit" value="Добавить картинку"/>
+    </form>
     <p>
         <span class="gold-star1" >★</span>
         <span style="font-size: 1.7em;" th:text="${product.getAvgRating() + '/5'}"></span>
@@ -139,7 +152,7 @@
     </form>
 
     <p>Цена:
-        <span th:text="${product.getPrice()}"></span>
+        <span th:text="${product.getPrice()} + ' руб'"></span>
     </p>
     <form th:if="${user.getRole()=='ROLE_ADMIN' or user.getRole()=='ROLE_SELLER'}" th:method="POST"
           th:action="@{/market/product/{id}(id=${product.getId()})}">

@@ -6,6 +6,8 @@ import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+
 @Entity
 @Table(name = "Product")
 public class Product {
@@ -33,6 +35,10 @@ public class Product {
     private List<Review> reviews = new ArrayList<>();
     @OneToMany(mappedBy = "product",cascade = CascadeType.REMOVE)
     private List<Property> properties = new ArrayList<>();
+    @OneToMany(mappedBy = "product", cascade = CascadeType.REMOVE)
+    private List<Image> images = new ArrayList<>();
+    @Column(name = "preview_image_id")
+    private Integer previewImageId;
     @Column(name = "created_at")
     private LocalDateTime time;
 
@@ -116,7 +122,38 @@ public class Product {
         this.owner = owner;
     }
 
+    public List<Image> getImages() {
+        return images;
+    }
 
+    public void setImages(List<Image> images) {
+        this.images = images;
+    }
+
+    public Integer getPreviewImageId() {
+        return previewImageId;
+    }
+
+    public void setPreviewImageId(Integer previewImageId) {
+        this.previewImageId = previewImageId;
+    }
+
+    public void setPreviewImageId(int previewImageId) {
+        this.previewImageId = previewImageId;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Product product = (Product) o;
+        return id == product.id && price == product.price && Double.compare(avgRating, product.avgRating) == 0 && Objects.equals(name, product.name) && Objects.equals(description, product.description) && Objects.equals(carts, product.carts) && Objects.equals(owner, product.owner) && Objects.equals(reviews, product.reviews) && Objects.equals(properties, product.properties) && Objects.equals(images, product.images) && Objects.equals(previewImageId, product.previewImageId) && Objects.equals(time, product.time);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, price, name, description, avgRating, carts, owner, reviews, properties, images, previewImageId, time);
+    }
     //Вспомогательные методы
 
     public void addPropertyToProduct(Property property) {
@@ -126,5 +163,9 @@ public class Product {
     public void addReviewToProduct(Review review) {
         this.reviews.add(review);
         review.setProduct(this);
+    }
+    public void addImageToProduct(Image image) {
+        image.setProduct(this);
+        this.images.add(image);
     }
 }

@@ -7,6 +7,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import ru.kolpakov.Market.App.models.Product;
 import ru.kolpakov.Market.App.models.Property;
 import ru.kolpakov.Market.App.models.Review;
@@ -16,6 +17,7 @@ import ru.kolpakov.Market.App.utils.GetPerson;
 import ru.kolpakov.Market.SecurityForApp.models.Person;
 
 import java.util.Collections;
+import java.util.List;
 
 @Controller
 @RequestMapping("/market")
@@ -69,8 +71,9 @@ public class MainController {
     }
 
     @PostMapping("/add_product")
-    public String addProduct(@ModelAttribute("product") Product product) {
-        productService.addProduct(product);
+    public String addProduct(@ModelAttribute("product") Product product,
+                             @RequestParam("files") List<MultipartFile> files) {
+        productService.addProduct(product,files);
         return "redirect:/market";
     }
 
@@ -122,6 +125,12 @@ public class MainController {
     public String deleteReview(@PathVariable("id_product") int idProduct, @RequestParam("id") int id,
                                @RequestParam("login") String login) {
         productService.deleteReviewFromProduct(idProduct, id, login);
+
+        return "redirect:/market/product/{id_product}";
+    }
+    @PostMapping("/product/{id_product}/add_image")
+    public String addImageToProduct(@PathVariable("id_product") int idProduct, @RequestParam("file") MultipartFile file) {
+        productService.addImageToProduct(idProduct,file);
 
         return "redirect:/market/product/{id_product}";
     }

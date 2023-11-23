@@ -4,6 +4,8 @@ import ru.kolpakov.Market.SecurityForApp.models.Person;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "Review")
@@ -30,6 +32,8 @@ public class Review {
     @ManyToOne()
     @JoinColumn(name = "person_id", referencedColumnName = "id")
     private Person owner;
+    @OneToMany(mappedBy = "review",cascade = CascadeType.REMOVE)
+    private List<Image> images = new ArrayList<>();
 
     public int getId() {
         return id;
@@ -101,5 +105,18 @@ public class Review {
 
     public void setOwner(Person owner) {
         this.owner = owner;
+    }
+
+    public List<Image> getImages() {
+        return images;
+    }
+
+    public void setImages(List<Image> images) {
+        this.images = images;
+    }
+    //Вспомогательные методы
+    public void addImageToCharacter(Image image) {
+        image.setReview(this);
+        this.images.add(image);
     }
 }

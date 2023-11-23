@@ -21,23 +21,32 @@
 
 <div th:each="product : ${products}">
     <h3>
-        <a th:text="${product.getName()}" th:href="@{/market/product/{id}(id=${product.getId()})}">Наименование товара</a>
+        <a th:text="${product.getName()}" th:href="@{/market/product/{id}(id=${product.getId()})}">Наименование
+            товара</a>
     </h3>
+    <div>
+        <div th:if="${product.getImages().isEmpty()}">
+            <p>У товара нет картинки</p>
+        </div>
+        <div th:unless="${product.getImages().isEmpty()}">
+            <img th:src="@{/market/images/{id}(id = ${product.getImages().get(product.getPreviewImageId()).getId()})}" height="200px" alt=""/>
+        </div>
+    </div>
     <p>
-        <span class="gold-star1" >★</span>
+        <span class="gold-star1">★</span>
         <span style="font-size: 1.25em;" th:text="${product.getAvgRating() + '/5'}"></span>
     </p>
     <h4>Описание</h4>
     <p th:text="${product.getDescription()}"></p>
     <h4>Цена: </h4>
     <a th:text="${product.getPrice()} + ' руб'"></a>
-    <h4  >Продавец: </h4>
+    <h4>Продавец: </h4>
     <a th:text="${product.getOwner().getUsername()}"></a>
 
     <h4>Характеристики:</h4>
     <div th:if="${product.getProperties().isEmpty()}">Характеристики пока не указаны</div>
     <div th:unless="${product.getProperties().isEmpty()}" th:each="property : ${product.getProperties()}">
-        <a th:text="${property.getName() + ': ' + property.getValue()}" >Характеристика</a>
+        <a th:text="${property.getName() + ': ' + property.getValue()}">Характеристика</a>
     </div>
 
     <form th:method="UPDATE" th:action="@{/market/cart/{id}/add_product(id=${user.getCart().getId()})}">
@@ -45,7 +54,8 @@
         <button>Добавить товар в корзину</button>
     </form>
 
-    <form th:if="${user.getRole()=='ROLE_ADMIN' or user.getRole()=='ROLE_SELLER'}" th:method="DELETE" th:action="@{/market/delete_product}">
+    <form th:if="${user.getRole()=='ROLE_ADMIN' or user.getRole()=='ROLE_SELLER'}" th:method="DELETE"
+          th:action="@{/market/delete_product}">
         <input type="hidden" name="id" th:value="${product.getId()}"/>
         <button>Удалить товар</button>
     </form>

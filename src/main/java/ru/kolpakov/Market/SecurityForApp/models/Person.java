@@ -1,5 +1,6 @@
 package ru.kolpakov.Market.SecurityForApp.models;
 
+import org.springframework.format.annotation.DateTimeFormat;
 import ru.kolpakov.Market.App.models.Cart;
 import ru.kolpakov.Market.App.models.Product;
 import ru.kolpakov.Market.App.models.Review;
@@ -11,7 +12,9 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "Person")
@@ -40,11 +43,12 @@ public class Person {
     @Column(name = "role")
     private String role;
     @Column(name = "date_reg")
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime dateOfRegistration;
     @OneToOne(mappedBy = "owner")
     private Cart cart;
-    @OneToMany(mappedBy = "owner")
-    private List<Product> products = new ArrayList<>();
+    @OneToMany(mappedBy = "owner", fetch = FetchType.EAGER)
+    private Set<Product> products = new HashSet<>();
     @OneToMany(mappedBy = "owner")
     private List<Review> reviews = new ArrayList<>();
 
@@ -112,11 +116,11 @@ public class Person {
         this.cart = cart;
     }
 
-    public List<Product> getProducts() {
+    public Set<Product> getProducts() {
         return products;
     }
 
-    public void setProducts(List<Product> products) {
+    public void setProducts(Set<Product> products) {
         this.products = products;
     }
 
