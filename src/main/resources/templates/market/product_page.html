@@ -229,7 +229,7 @@
     <div th:unless="${product.getReviews().isEmpty()}" th:each="review : ${product.getReviews()}">
         <a th:text="${review.getOwner().getUsername()}">Пользователь</a>
         <br/>
-        <a th:text="${review.getCreatedAt()}">Дата</a>
+        <a th:text="${#temporals.format(review.getCreatedAt(), 'dd.MM.yyyy HH:mm')}">Дата</a>
         <br/>
         <a th:unless="${review.getAdvantages()==null or review.getAdvantages().isEmpty()}"
            th:text="${'Достоинства: ' + review.getAdvantages()}">Достоинства</a>
@@ -289,8 +289,6 @@
                 if (xhr.status === 200) {
                     closeModal();
                     showReviewConfirmation();
-                } else {
-                    // Обработка ошибок при отправке формы, если нужно
                 }
             }
         };
@@ -358,7 +356,7 @@
     };
 
     window.onresize = function () {
-        centerModal(); // Пересчет положения при изменении размера окна
+        centerModal();
     };
 </script>
 
