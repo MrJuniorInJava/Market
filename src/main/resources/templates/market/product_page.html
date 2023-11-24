@@ -25,6 +25,7 @@
         .rating input[type="radio"]:hover ~ label {
             color: gold;
         }
+
         .rating {
             order: 2;
         }
@@ -32,6 +33,7 @@
         .rating label {
             order: 1;
         }
+
         .stars {
             display: flex;
         }
@@ -49,6 +51,7 @@
             color: #ccc;
             cursor: pointer;
         }
+
         .modal {
             display: none;
             position: fixed;
@@ -58,7 +61,7 @@
             width: 100%;
             height: 100%;
             overflow: auto;
-            background-color: rgba(0,0,0,0.4);
+            background-color: rgba(0, 0, 0, 0.4);
             padding-top: 60px;
         }
 
@@ -83,11 +86,13 @@
             text-decoration: none;
             cursor: pointer;
         }
+
         .gold-star1 {
             color: gold;
             cursor: pointer;
             font-size: 2em;
         }
+
         #confirmationModal {
             display: none;
             position: fixed;
@@ -97,7 +102,7 @@
             width: 100%;
             height: 100%;
             overflow: auto;
-            background-color: rgba(0,0,0,0.4);
+            background-color: rgba(0, 0, 0, 0.4);
             padding-top: 60px;
         }
 
@@ -109,6 +114,22 @@
             width: 40%;
         }
 
+        #imageGallery {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 10px; /* Расстояние между картинками в ленте */
+        }
+
+        #imageGallery img {
+            width: 50px; /* Ширина превью-картинки в ленте */
+            height: auto; /* Автоматическая высота, чтобы сохранить пропорции */
+            cursor: pointer;
+        }
+
+        #imageGallery img:hover {
+            border: 2px solid gold; /* Граница при наведении на превью-картинку */
+        }
 
     </style>
 </head>
@@ -121,8 +142,21 @@
         <div th:if="${product.getImages().isEmpty()}">
             <p>У товара нет картинки</p>
         </div>
-        <div th:unless="${product.getImages().isEmpty()}" th:each="image : ${product.getImages()}">
-            <img th:src="@{/market/images/{id}(id = ${image.getId()})}" height="300px" alt=""/>
+        <div th:unless="${product.getImages().isEmpty()}">
+            <div id="previewContainer" style="display: flex;">
+                <img id="previewImage" th:src="@{/market/images/{id}(id = ${product.getImages().get(product.getPreviewImageId()).getId()})}" alt="Превью картинка">
+                <div id="imageGallery">
+                    <img th:each="image : ${product.getImages()}"
+                         th:src="@{/market/images/{id}(id = ${image.getId()})}"
+                         onclick="changePreview(this)" alt="Картинка">
+                </div>
+            </div>
+            <div id="enlargedModal" class="modal">
+                <div class="modal-content">
+                    <span class="close" onclick="closeEnlargedModal()">&times;</span>
+                    <img id="enlargedImage" src="" alt="Увеличенное изображение">
+                </div>
+            </div>
         </div>
     </div>
     <form th:if="${user.getRole()=='ROLE_ADMIN' or user.getRole()=='ROLE_SELLER'}" th:method="POST"
@@ -131,7 +165,7 @@
         <input type="submit" value="Добавить картинку"/>
     </form>
     <p>
-        <span class="gold-star1" >★</span>
+        <span class="gold-star1">★</span>
         <span style="font-size: 1.7em;" th:text="${product.getAvgRating() + '/5'}"></span>
     </p>
 
@@ -229,7 +263,7 @@
                     <label for="rating1">★</label>
                 </div>
 
-                <input type="button" value="Добавить отзыв к товару" onclick="submitReviewForm()" />
+                <input type="button" value="Добавить отзыв к товару" onclick="submitReviewForm()"/>
                 <br/>
             </div>
         </div>
@@ -252,12 +286,14 @@
         <br/>
         <a th:unless="${review.getComment()==null or review.getComment().isEmpty()}"
            th:text="${'Комментарий: ' + review.getComment()}">Комментарий</a>
-        <a th:unless="${review.getRating()==0}"><div class="stars">
+        <a th:unless="${review.getRating()==0}">
+            <div class="stars">
         <span class="star" th:each="i : ${#numbers.sequence(1, 5)}">
             <span th:if="${i le review.getRating()}" class="gold-star">★</span>
             <span th:unless="${i le review.getRating()}" class="gray-star">★</span>
         </span>
-        </div></a>
+            </div>
+        </a>
         <form th:if="${user.getRole()=='ROLE_ADMIN' or user.getId()==review.getOwner().getId()}"
               th:action="@{/market/product/{id_product}/delete_review(id_product=${product.getId()})}"
               th:method="POST" class="delete-review-form">
@@ -325,6 +361,7 @@
         var confirmationModal = document.getElementById('confirmationModal');
         confirmationModal.style.display = 'none';
     }
+
     function centerConfirmationModal() {
         var confirmationModalContent = document.querySelector('#confirmationModal .modal-content');
         confirmationModalContent.style.marginTop = (window.innerHeight - confirmationModalContent.offsetHeight) / 2 + 'px';
@@ -348,6 +385,62 @@
         var modalContent = document.querySelector('.modal-content');
         modalContent.style.marginTop = (window.innerHeight - modalContent.offsetHeight) / 2 + 'px';
     }
+    function changePreview(clickedImage) {
+        var previewImage = document.getElementById('previewImage');
+        previewImage.src = clickedImage.src;
+        updatePreviewThumbnails();
+    }
+
+    function openEnlargedModal() {
+        var enlargedModal = document.getElementById('enlargedModal');
+        enlargedModal.style.display = 'block';
+    }
+
+    function closeEnlargedModal() {
+        var enlargedModal = document.getElementById('enlargedModal');
+        enlargedModal.style.display = 'none';
+    }
+    function updatePreviewThumbnails() {
+        var previewThumbnails = document.getElementById('previewThumbnails');
+        previewThumbnails.innerHTML = ''; // Очищаем содержимое
+
+        // Добавляем превью-изображения в ленту
+        var images = document.getElementById('imageGallery').getElementsByTagName('img');
+        for (var i = 0; i < images.length; i++) {
+            var thumbnail = document.createElement('img');
+            thumbnail.src = images[i].src;
+            thumbnail.alt = 'Превью';
+            thumbnail.onclick = function () {
+                changePreview(this);
+            };
+            previewThumbnails.appendChild(thumbnail);
+        }
+    }
+
+    // Обновляем ленту превью при загрузке страницы
+    window.onload = function () {
+        updatePreviewThumbnails();
+        var scrollPosition = localStorage.getItem('scrollPosition');
+        if (scrollPosition) {
+            window.scrollTo(0, parseInt(scrollPosition));
+            localStorage.removeItem('scrollPosition');
+        }
+    };
+
+    // После функции changePreview добавьте этот код
+    var previewImage = document.getElementById('previewImage');
+    previewImage.onclick = function () {
+        document.getElementById('enlargedImage').src = this.src;
+        openEnlargedModal();
+        updatePreviewThumbnails(); // Обновляем ленту превью при открытии увеличенной картинки
+    };
+
+    // Добавьте обработчик событий для увеличенной картинки
+    var previewImage = document.getElementById('previewImage');
+    previewImage.onclick = function () {
+        document.getElementById('enlargedImage').src = this.src;
+        openEnlargedModal();
+    };
 
     window.onclick = function (event) {
         if (event.target === modal) {
@@ -361,14 +454,6 @@
             localStorage.setItem('scrollPosition', window.scrollY || document.documentElement.scrollTop);
         });
     }
-
-    window.onload = function () {
-        var scrollPosition = localStorage.getItem('scrollPosition');
-        if (scrollPosition) {
-            window.scrollTo(0, parseInt(scrollPosition));
-            localStorage.removeItem('scrollPosition');
-        }
-    };
 
     window.onresize = function () {
         centerModal();

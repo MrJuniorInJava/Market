@@ -154,8 +154,21 @@ public class ProductService {
             product.addImageToProduct(image);
         }
         imagesRepository.save(image);
-
-
+    }
+    @Transactional
+    @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_SELLER')")
+    public void deleteImageFromProduct(int idProduct, int idImage) {
+        Product product = productsRepository.findById(idProduct).get();
+        Image image = imagesRepository.findById(idImage).get();
+        if(image.equals(product.getImages().get(product.getPreviewImageId()))){
+            if(product.getImages().size()!=1){
+                product.setPreviewImageId(product.getImages()
+                        .indexOf(product.getImages()
+                                .stream().findFirst().get()));
+            }
+        }
+        product.getImages().remove(image);
+        imagesRepository.delete(image);
     }
 
 }

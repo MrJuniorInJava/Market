@@ -134,6 +134,12 @@ public class MainController {
 
         return "redirect:/market/product/{id_product}";
     }
+    @PostMapping("/product/{id_product}/delete_image")
+    public String addImageToProduct(@PathVariable("id_product") int idProduct, @RequestParam("id_image") String idImage) {
+        productService.deleteImageFromProduct(idProduct,Integer.parseInt(idImage));
+
+        return "redirect:/market/product/{id_product}";
+    }
 
 
 }
