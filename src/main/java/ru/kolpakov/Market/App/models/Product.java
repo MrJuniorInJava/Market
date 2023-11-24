@@ -1,5 +1,6 @@
 package ru.kolpakov.Market.App.models;
 
+import org.springframework.format.annotation.DateTimeFormat;
 import ru.kolpakov.Market.SecurityForApp.models.Person;
 
 import javax.persistence.*;
@@ -40,6 +41,7 @@ public class Product {
     @Column(name = "preview_image_id")
     private Integer previewImageId;
     @Column(name = "created_at")
+    @DateTimeFormat(pattern = "dd/MM/yyyy hh:mm")
     private LocalDateTime time;
 
     public int getId() {

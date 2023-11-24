@@ -1,5 +1,6 @@
 package ru.kolpakov.Market.App.models;
 
+import org.springframework.format.annotation.DateTimeFormat;
 import ru.kolpakov.Market.SecurityForApp.models.Person;
 
 import javax.persistence.*;
@@ -25,6 +26,7 @@ public class Review {
     @Column(name = "comment")
     private String comment;
     @Column(name = "created_at")
+    @DateTimeFormat(pattern = "dd/MM/yyyy hh:mm")
     private LocalDateTime createdAt;
     @ManyToOne()
     @JoinColumn(name = "product_id", referencedColumnName = "id")

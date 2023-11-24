@@ -302,12 +302,14 @@
                 if (xhr.status === 200) {
                     closeModal();
                     showReviewConfirmation();
+                    window.location.reload();
                 }
             }
         };
 
         xhr.open('POST', document.getElementById('reviewForm').action, true);
         xhr.send(formData);
+        return false;
     }
 
     function showReviewConfirmation() {
