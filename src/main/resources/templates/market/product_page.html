@@ -196,7 +196,8 @@
     </form>
 
     <p>Продавец:
-        <span th:text=" ${product.getOwner().getUsername()}"></span>
+        <span th:text=" ${product.getOwner().getUsername()}"
+              th:href="@{/market/user/{id}(id=${product.getOwner().getId()})}"></span>
     </p>
 
     <h4>Характеристики:</h4>
@@ -274,7 +275,8 @@
     <br/>
     <br/>
     <div th:unless="${product.getReviews().isEmpty()}" th:each="review : ${product.getReviews()}">
-        <a th:text="${review.getOwner().getUsername()}">Пользователь</a>
+        <a th:text="${review.getOwner().getUsername()}"
+           th:href="@{/market/user/{id}(id=${review.getOwner().getId()})}">Пользователь</a>
         <br/>
         <a th:text="${#temporals.format(review.getCreatedAt(), 'dd.MM.yyyy HH:mm')}">Дата</a>
         <br/>

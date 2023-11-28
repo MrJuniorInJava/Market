@@ -41,7 +41,8 @@
     <h4>Цена: </h4>
     <a th:text="${product.getPrice()} + ' руб'"></a>
     <h4>Продавец: </h4>
-    <a th:text="${product.getOwner().getUsername()}"></a>
+    <a th:text="${product.getOwner().getUsername()}"
+       th:href="@{/market/user/{id}(id=${product.getOwner().getId()})}"></a>
 
     <h4>Характеристики:</h4>
     <div th:if="${product.getProperties().isEmpty()}">Характеристики пока не указаны</div>

@@ -2,8 +2,6 @@ package ru.kolpakov.Market.App.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -14,7 +12,7 @@ import ru.kolpakov.Market.App.models.Review;
 import ru.kolpakov.Market.App.services.CartService;
 import ru.kolpakov.Market.App.services.ProductService;
 import ru.kolpakov.Market.App.utils.GetPerson;
-import ru.kolpakov.Market.SecurityForApp.models.Person;
+import ru.kolpakov.Market.SecurityForApp.services.PersonDetailsService;
 
 import java.util.Collections;
 import java.util.List;
@@ -24,18 +22,26 @@ import java.util.List;
 public class MainController {
     private final ProductService productService;
     private final CartService cartService;
+    private final PersonDetailsService personDetailsService;
 
     @Autowired
-    public MainController(ProductService productService, CartService cartService) {
+    public MainController(ProductService productService, CartService cartService, PersonDetailsService personDetailsService) {
         this.productService = productService;
         this.cartService = cartService;
+        this.personDetailsService = personDetailsService;
     }
-
     @GetMapping()
     public String mainPage(Model model) {
         model.addAttribute("products", productService.findAll());
         model.addAttribute("user", GetPerson.returnPersonFromContext());
         return "market/main_page";
+    }
+
+    @GetMapping("user/{id}")
+    public String userPage(@PathVariable("id") int id,
+                           Model model){
+        model.addAttribute("user",personDetailsService.findUserById(id));
+        return "market/user_page";
     }
 
     @GetMapping("/product/{id}")

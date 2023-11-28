@@ -30,4 +30,7 @@ public class PersonDetailsService implements UserDetailsService {
         }
         return new PersonDetails(person.get());
     }
+    public Person findUserById(int id){
+        return personRepository.findById(id).get();
+    }
 }

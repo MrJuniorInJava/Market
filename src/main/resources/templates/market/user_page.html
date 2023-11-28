@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>User</title>
+</head>
+<body>
+<div>
+    <h3 th:text="'Имя пользователя: '+${user.getUsername()}">имя пользователя</h3>
+    <div th:switch="${user.getRole()}">
+        <p th:case="'ROLE_SELLER'">Роль: продавец</p>
+        <p th:case="'ROLE_USER'">Роль: покупатель</p>
+        <p th:case="'ROLE_ADMIN'">Роль: администратор</p>
+    </div>
+    <p th:text="'На торговой площадке с '+${#temporals.format(user.getDateOfRegistration(), 'dd.MM.yyyy HH:mm')}">дата регистрации</p>
+    <div th:if="${user.getRole()=='ROLE_ADMIN'}">
+        <p>Средний рейтинг товаров</p>
+        <p>Продано товаров</p>
+    </div>
+</div>
+</body>
+</html>
