@@ -37,7 +37,7 @@ public class Product {
     @OneToMany(mappedBy = "product",cascade = CascadeType.REMOVE)
     private List<Property> properties = new ArrayList<>();
     @OneToMany(mappedBy = "product", cascade = CascadeType.REMOVE)
-    private List<Image> images = new ArrayList<>();
+    private List<ProductImage> ProductImages = new ArrayList<>();
     @Column(name = "preview_image_id")
     private Integer previewImageId;
     @Column(name = "created_at")
@@ -124,12 +124,12 @@ public class Product {
         this.owner = owner;
     }
 
-    public List<Image> getImages() {
-        return images;
+    public List<ProductImage> getImages() {
+        return ProductImages;
     }
 
-    public void setImages(List<Image> images) {
-        this.images = images;
+    public void setImages(List<ProductImage> ProductImages) {
+        this.ProductImages = ProductImages;
     }
 
     public Integer getPreviewImageId() {
@@ -149,12 +149,12 @@ public class Product {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Product product = (Product) o;
-        return id == product.id && price == product.price && Double.compare(avgRating, product.avgRating) == 0 && Objects.equals(name, product.name) && Objects.equals(description, product.description) && Objects.equals(carts, product.carts) && Objects.equals(owner, product.owner) && Objects.equals(reviews, product.reviews) && Objects.equals(properties, product.properties) && Objects.equals(images, product.images) && Objects.equals(previewImageId, product.previewImageId) && Objects.equals(time, product.time);
+        return id == product.id && price == product.price && Double.compare(avgRating, product.avgRating) == 0 && Objects.equals(name, product.name) && Objects.equals(description, product.description) && Objects.equals(carts, product.carts) && Objects.equals(owner, product.owner) && Objects.equals(reviews, product.reviews) && Objects.equals(properties, product.properties) && Objects.equals(ProductImages, product.ProductImages) && Objects.equals(previewImageId, product.previewImageId) && Objects.equals(time, product.time);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, price, name, description, avgRating, carts, owner, reviews, properties, images, previewImageId, time);
+        return Objects.hash(id, price, name, description, avgRating, carts, owner, reviews, properties, ProductImages, previewImageId, time);
     }
     //Вспомогательные методы
 
@@ -166,8 +166,8 @@ public class Product {
         this.reviews.add(review);
         review.setProduct(this);
     }
-    public void addImageToProduct(Image image) {
-        image.setProduct(this);
-        this.images.add(image);
+    public void addImageToProduct(ProductImage productImage) {
+        productImage.setProduct(this);
+        this.ProductImages.add(productImage);
     }
 }

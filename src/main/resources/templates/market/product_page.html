@@ -130,6 +130,14 @@
         #imageGallery img:hover {
             border: 2px solid gold; /* Граница при наведении на превью-картинку */
         }
+        .review-image {
+            width: 100px; /* Замените на желаемую ширину */
+            height: auto; /* Автоматическая высота, чтобы сохранить пропорции */
+        }
+        .product-image {
+            width: 300px; /* Замените на желаемую ширину */
+            height: auto; /* Автоматическая высота, чтобы сохранить пропорции */
+        }
 
     </style>
 </head>
@@ -144,10 +152,10 @@
         </div>
         <div th:unless="${product.getImages().isEmpty()}">
             <div id="previewContainer" style="display: flex;">
-                <img id="previewImage" th:src="@{/market/images/{id}(id = ${product.getImages().get(product.getPreviewImageId()).getId()})}" alt="Превью картинка">
+                <img class="product-image" id="previewImage" th:src="@{/market/product_images/{id}(id = ${product.getImages().get(product.getPreviewImageId()).getId()})}" alt="Превью картинка">
                 <div id="imageGallery">
-                    <img th:each="image : ${product.getImages()}"
-                         th:src="@{/market/images/{id}(id = ${image.getId()})}"
+                    <img th:each="productImage : ${product.getImages()}"
+                         th:src="@{/market/product_images/{id}(id = ${productImage.getId()})}"
                          onclick="changePreview(this)" alt="Картинка">
                 </div>
             </div>
@@ -234,7 +242,7 @@
 </div>
 <div>
     <form th:action="@{/market/product/{id_product}/add_review(id_product=${product.getId()})}" method="post"
-          th:object="${newReview}" onsubmit="return false;" id="reviewForm">
+          th:object="${newReview}" onsubmit="return false;" id="reviewForm" enctype="multipart/form-data">
 
         <button id="openModal" onclick="openModal()">Добавить отзыв</button>
 
@@ -250,6 +258,11 @@
                 <br/>
                 <label for="comment">Введите комментарий</label>
                 <input type="text" th:field="*{comment}" id="comment"/>
+                <br/>
+                <label>
+                    Выберите изображения
+                    <input type="file" name="files" multiple/>
+                </label>
                 <br/>
                 <div class="rating">
                     <input type="radio" id="rating5" name="rating" value="5"/>
@@ -292,6 +305,11 @@
         <br/>
         <a th:unless="${review.getComment()==null or review.getComment().isEmpty()}"
            th:text="${'Комментарий: ' + review.getComment()}">Комментарий</a>
+        <div th:unless="${review.getReviewImages().isEmpty()}" th:each="image : ${review.getReviewImages()}">
+            <div>
+                <img class="review-image" th:src="@{/market/review_images/{id}(id = ${image.getId()})}">
+            </div>
+        </div>
         <a th:unless="${review.getRating()==0}">
             <div class="stars">
         <span class="star" th:each="i : ${#numbers.sequence(1, 5)}">
@@ -411,10 +429,10 @@
         previewThumbnails.innerHTML = ''; // Очищаем содержимое
 
         // Добавляем превью-изображения в ленту
-        var images = document.getElementById('imageGallery').getElementsByTagName('img');
-        for (var i = 0; i < images.length; i++) {
+        var ProductImages = document.getElementById('imageGallery').getElementsByTagName('img');
+        for (var i = 0; i < ProductImages.length; i++) {
             var thumbnail = document.createElement('img');
-            thumbnail.src = images[i].src;
+            thumbnail.src = ProductImages[i].src;
             thumbnail.alt = 'Превью';
             thumbnail.onclick = function () {
                 changePreview(this);

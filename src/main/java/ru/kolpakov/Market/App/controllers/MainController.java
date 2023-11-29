@@ -127,8 +127,10 @@ public class MainController {
         return "redirect:/market/product/{id_product}";
     }
     @PostMapping("/product/{id_product}/add_review")
-    public String addReview(@PathVariable("id_product") int idProduct, @ModelAttribute("newReview") Review review) {
-        productService.addReviewToProduct(idProduct,review);
+    public String addReview(@PathVariable("id_product") int idProduct,
+                            @ModelAttribute("newReview") Review review,
+                            @RequestParam("files") List<MultipartFile> files) {
+        productService.addReviewToProduct(idProduct,review,files);
 
         return "redirect:/market/product/{id_product}";
     }
@@ -147,7 +149,7 @@ public class MainController {
         return "redirect:/market/product/{id_product}";
     }
     @PostMapping("/product/{id_product}/delete_image")
-    public String addImageToProduct(@PathVariable("id_product") int idProduct, @RequestParam("id_image") String idImage) {
+    public String deleteImageToProduct(@PathVariable("id_product") int idProduct, @RequestParam("id_image") String idImage) {
         Person owner = productService.findProductById(idProduct).getOwner();
         productService.deleteImageFromProduct(idProduct,Integer.parseInt(idImage),owner);
 

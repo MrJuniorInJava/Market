@@ -1,22 +1,36 @@
 package ru.kolpakov.Market.App.utils;
 
 import org.springframework.web.multipart.MultipartFile;
-import ru.kolpakov.Market.App.models.Image;
+import ru.kolpakov.Market.App.models.ProductImage;
+import ru.kolpakov.Market.App.models.ReviewImage;
 
 import java.io.IOException;
 
 public class ReturnImage {
-    public static Image toImageEntity(MultipartFile file) {
-        Image image = new Image();
-        image.setName(file.getName());
-        image.setOriginalFileName(file.getOriginalFilename());
-        image.setContentType(file.getContentType());
-        image.setSize(file.getSize());
+    public static ProductImage productImageToImageEntity(MultipartFile file) {
+        ProductImage productImage = new ProductImage();
+        productImage.setName(file.getName());
+        productImage.setOriginalFileName(file.getOriginalFilename());
+        productImage.setContentType(file.getContentType());
+        productImage.setSize(file.getSize());
         try {
-            image.setBytes(file.getBytes());
+            productImage.setBytes(file.getBytes());
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        return image;
+        return productImage;
+    }
+    public static ReviewImage reviewImageToImageEntity(MultipartFile file) {
+        ReviewImage reviewImage = new ReviewImage();
+        reviewImage.setName(file.getName());
+        reviewImage.setOriginalFileName(file.getOriginalFilename());
+        reviewImage.setContentType(file.getContentType());
+        reviewImage.setSize(file.getSize());
+        try {
+            reviewImage.setBytes(file.getBytes());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        return reviewImage;
     }
 }

@@ -3,8 +3,8 @@ package ru.kolpakov.Market.App.models;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "image")
-public class Image {
+@Table(name = "review_image")
+public class ReviewImage {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
@@ -17,15 +17,10 @@ public class Image {
     private Long size;
     @Column(name = "content_type")
     private String contentType;
-    @Column(name = "is_preview_image")
-    private boolean isPreviewImage;
     @Column(name = "bytes")
     private byte[] bytes;
     @ManyToOne()
-    @JoinColumn(name = "product_id",referencedColumnName = "id")
-    private Product product;
-    @ManyToOne()
-    @JoinColumn(name = "review_id",referencedColumnName = "id")
+    @JoinColumn(name = "review_id", referencedColumnName = "id")
     private Review review;
 
     public int getId() {
@@ -68,28 +63,12 @@ public class Image {
         this.contentType = contentType;
     }
 
-    public boolean isPreviewImage() {
-        return isPreviewImage;
-    }
-
-    public void setPreviewImage(boolean previewImage) {
-        isPreviewImage = previewImage;
-    }
-
     public byte[] getBytes() {
         return bytes;
     }
 
     public void setBytes(byte[] bytes) {
         this.bytes = bytes;
-    }
-
-    public Product getProduct() {
-        return product;
-    }
-
-    public void setProduct(Product product) {
-        this.product = product;
     }
 
     public Review getReview() {

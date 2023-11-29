@@ -35,7 +35,7 @@ public class Review {
     @JoinColumn(name = "person_id", referencedColumnName = "id")
     private Person owner;
     @OneToMany(mappedBy = "review",cascade = CascadeType.REMOVE)
-    private List<Image> images = new ArrayList<>();
+    private List<ReviewImage> reviewImages = new ArrayList<>();
 
     public int getId() {
         return id;
@@ -109,16 +109,17 @@ public class Review {
         this.owner = owner;
     }
 
-    public List<Image> getImages() {
-        return images;
+    public List<ReviewImage> getReviewImages() {
+        return reviewImages;
     }
 
-    public void setImages(List<Image> images) {
-        this.images = images;
+    public void setReviewImages(List<ReviewImage> reviewImages) {
+        this.reviewImages = reviewImages;
     }
+
     //Вспомогательные методы
-    public void addImageToCharacter(Image image) {
-        image.setReview(this);
-        this.images.add(image);
+    public void addImageToReview(ReviewImage reviewImage) {
+        reviewImage.setReview(this);
+        this.reviewImages.add(reviewImage);
     }
 }

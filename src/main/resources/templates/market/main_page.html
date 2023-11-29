@@ -29,7 +29,7 @@
             <p>У товара нет картинки</p>
         </div>
         <div th:unless="${product.getImages().isEmpty()}">
-            <img th:src="@{/market/images/{id}(id = ${product.getImages().get(product.getPreviewImageId()).getId()})}" height="200px" alt=""/>
+            <img th:src="@{/market/product_images/{id}(id = ${product.getImages().get(product.getPreviewImageId()).getId()})}" height="200px" alt=""/>
         </div>
     </div>
     <p>
