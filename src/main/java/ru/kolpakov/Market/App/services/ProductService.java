@@ -15,6 +15,7 @@ import ru.kolpakov.Market.App.repositories.PropertiesRepository;
 import ru.kolpakov.Market.App.repositories.ReviewsRepository;
 import ru.kolpakov.Market.App.utils.GetPerson;
 import ru.kolpakov.Market.App.utils.ReturnImage;
+import ru.kolpakov.Market.SecurityForApp.models.Person;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -70,8 +71,8 @@ public class ProductService {
     }
 
     @Transactional
-    @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_SELLER')")
-    public void deleteProductById(int id) {
+    @PreAuthorize("hasRole('ROLE_ADMIN') or (hasRole('ROLE_SELLER') and #owner.login==principal.username)")
+    public void deleteProductById(int id, Person owner) {
         productsRepository.deleteById(id);
     }
 
@@ -83,8 +84,8 @@ public class ProductService {
     }
 
     @Transactional
-    @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_SELLER')")
-    public void updateProductField(int id, String fieldName, String newValue) {
+    @PreAuthorize("hasRole('ROLE_ADMIN') or (hasRole('ROLE_SELLER') and #owner.login==principal.username)")
+    public void updateProductField(int id, String fieldName, String newValue, Person owner) {
         Product currentProduct = productsRepository.findById(id).get();
         switch (fieldName) {
             case "name":
@@ -102,15 +103,15 @@ public class ProductService {
     }
 
     @Transactional
-    @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_SELLER')")
-    public void addPropertyToProduct(int idProduct, Property property) {
+    @PreAuthorize("hasRole('ROLE_ADMIN') or (hasRole('ROLE_SELLER') and #owner.login==principal.username)")
+    public void addPropertyToProduct(int idProduct, Property property, Person owner) {
         propertiesRepository.save(property);
         productsRepository.findById(idProduct).get().addPropertyToProduct(property);
     }
 
     @Transactional
-    @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_SELLER')")
-    public void deletePropertyFromProduct(int id, int idProduct) {
+    @PreAuthorize("hasRole('ROLE_ADMIN') or (hasRole('ROLE_SELLER') and #owner.login==principal.username)")
+    public void deletePropertyFromProduct(int id, int idProduct, Person owner) {
         Property property = propertiesRepository.findById(id).get();
         productsRepository.findById(idProduct).get().getProperties().remove(property);
         propertiesRepository.delete(property);
@@ -142,8 +143,8 @@ public class ProductService {
     }
 
     @Transactional
-    @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_SELLER')")
-    public void addImageToProduct(int idProduct, MultipartFile file) {
+    @PreAuthorize("hasRole('ROLE_ADMIN') or #owner.login==principal.username")
+    public void addImageToProduct(int idProduct, MultipartFile file,Person owner) {
         Product product = productsRepository.findById(idProduct).get();
         Image image = null;
         if (file.getSize() != 0) {
@@ -156,8 +157,8 @@ public class ProductService {
         imagesRepository.save(image);
     }
     @Transactional
-    @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_SELLER')")
-    public void deleteImageFromProduct(int idProduct, int idImage) {
+    @PreAuthorize("hasRole('ROLE_ADMIN') or #owner.login==principal.username")
+    public void deleteImageFromProduct(int idProduct, int idImage, Person owner) {
         Product product = productsRepository.findById(idProduct).get();
         Image image = imagesRepository.findById(idImage).get();
         if(image.equals(product.getImages().get(product.getPreviewImageId()))){

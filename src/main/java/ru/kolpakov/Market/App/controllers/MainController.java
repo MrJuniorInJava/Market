@@ -12,6 +12,7 @@ import ru.kolpakov.Market.App.models.Review;
 import ru.kolpakov.Market.App.services.CartService;
 import ru.kolpakov.Market.App.services.ProductService;
 import ru.kolpakov.Market.App.utils.GetPerson;
+import ru.kolpakov.Market.SecurityForApp.models.Person;
 import ru.kolpakov.Market.SecurityForApp.services.PersonDetailsService;
 
 import java.util.Collections;
@@ -57,7 +58,8 @@ public class MainController {
     public String updateField(@PathVariable("id") int id,
                               @RequestParam("fieldName") String fieldName,
                               @RequestParam("newValue") String newValue) {
-        productService.updateProductField(id, fieldName, newValue);
+        Person owner = productService.findProductById(id).getOwner();
+        productService.updateProductField(id, fieldName, newValue, owner);
         return "redirect:/market/product/{id}";
     }
 
@@ -85,7 +87,8 @@ public class MainController {
 
     @PostMapping("/delete_product")
     public String deleteProduct(@RequestParam("id") int id) {
-        productService.deleteProductById(id);
+        Person owner = productService.findProductById(id).getOwner();
+        productService.deleteProductById(id,owner);
         return "redirect:/market";
     }
 
@@ -111,13 +114,15 @@ public class MainController {
 
     @PostMapping("/product/{id_product}/add_property")
     public String addProperty(@PathVariable("id_product") int idProduct, @ModelAttribute("newProperty") Property property) {
-        productService.addPropertyToProduct(idProduct,property);
+        Person owner = productService.findProductById(idProduct).getOwner();
+        productService.addPropertyToProduct(idProduct,property,owner);
 
         return "redirect:/market/product/{id_product}";
     }
     @PostMapping("/product/{id_product}/delete_property")
     public String deleteProperty(@PathVariable("id_product") int idProduct, @RequestParam int id) {
-        productService.deletePropertyFromProduct(id, idProduct);
+        Person owner = productService.findProductById(idProduct).getOwner();
+        productService.deletePropertyFromProduct(id, idProduct,owner);
 
         return "redirect:/market/product/{id_product}";
     }
@@ -136,13 +141,15 @@ public class MainController {
     }
     @PostMapping("/product/{id_product}/add_image")
     public String addImageToProduct(@PathVariable("id_product") int idProduct, @RequestParam("file") MultipartFile file) {
-        productService.addImageToProduct(idProduct,file);
+        Person owner = productService.findProductById(idProduct).getOwner();
+        productService.addImageToProduct(idProduct,file,owner);
 
         return "redirect:/market/product/{id_product}";
     }
     @PostMapping("/product/{id_product}/delete_image")
     public String addImageToProduct(@PathVariable("id_product") int idProduct, @RequestParam("id_image") String idImage) {
-        productService.deleteImageFromProduct(idProduct,Integer.parseInt(idImage));
+        Person owner = productService.findProductById(idProduct).getOwner();
+        productService.deleteImageFromProduct(idProduct,Integer.parseInt(idImage),owner);
 
         return "redirect:/market/product/{id_product}";
     }

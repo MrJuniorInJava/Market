@@ -55,7 +55,8 @@
         <button>Добавить товар в корзину</button>
     </form>
 
-    <form th:if="${user.getRole()=='ROLE_ADMIN' or user.getRole()=='ROLE_SELLER'}" th:method="DELETE"
+    <form th:if="${user.getRole()=='ROLE_ADMIN' or (user.getRole()=='ROLE_SELLER' and user.getLogin()==product.getOwner().getLogin())}"
+          th:method="DELETE"
           th:action="@{/market/delete_product}">
         <input type="hidden" name="id" th:value="${product.getId()}"/>
         <button>Удалить товар</button>
