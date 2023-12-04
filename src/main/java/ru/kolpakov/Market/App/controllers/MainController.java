@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ru.kolpakov.Market.App.models.Product;
@@ -31,6 +32,7 @@ public class MainController {
         this.cartService = cartService;
         this.personDetailsService = personDetailsService;
     }
+
     @GetMapping()
     public String mainPage(Model model) {
         model.addAttribute("products", productService.findAll());
@@ -40,8 +42,8 @@ public class MainController {
 
     @GetMapping("user/{id}")
     public String userPage(@PathVariable("id") int id,
-                           Model model){
-        model.addAttribute("user",personDetailsService.findUserById(id));
+                           Model model) {
+        model.addAttribute("user", personDetailsService.findUserById(id));
         return "market/user_page";
     }
 
@@ -50,7 +52,7 @@ public class MainController {
         model.addAttribute("product", productService.findProductById(id));
         model.addAttribute("newProperty", new Property());
         model.addAttribute("newReview", new Review());
-        model.addAttribute("user",GetPerson.returnPersonFromContext());
+        model.addAttribute("user", GetPerson.returnPersonFromContext());
         return "market/product_page";
     }
 
@@ -67,9 +69,10 @@ public class MainController {
     public String searchProduct(@RequestParam(value = "name", required = false) String name,
                                 Model model) {
         model.addAttribute("products", productService.searchByFirstChars(name));
-        model.addAttribute("user",GetPerson.returnPersonFromContext());
+        model.addAttribute("user", GetPerson.returnPersonFromContext());
         return "market/main_page";
     }
+
     @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_SELLER')")
     @GetMapping("/add_product")
     public String addProductPage(Model model) {
@@ -81,14 +84,14 @@ public class MainController {
     @PostMapping("/add_product")
     public String addProduct(@ModelAttribute("product") Product product,
                              @RequestParam("files") List<MultipartFile> files) {
-        productService.addProduct(product,files);
+        productService.addProduct(product, files);
         return "redirect:/market";
     }
 
     @PostMapping("/delete_product")
     public String deleteProduct(@RequestParam("id") int id) {
         Person owner = productService.findProductById(id).getOwner();
-        productService.deleteProductById(id,owner);
+        productService.deleteProductById(id, owner);
         return "redirect:/market";
     }
 
@@ -115,25 +118,28 @@ public class MainController {
     @PostMapping("/product/{id_product}/add_property")
     public String addProperty(@PathVariable("id_product") int idProduct, @ModelAttribute("newProperty") Property property) {
         Person owner = productService.findProductById(idProduct).getOwner();
-        productService.addPropertyToProduct(idProduct,property,owner);
+        productService.addPropertyToProduct(idProduct, property, owner);
 
         return "redirect:/market/product/{id_product}";
     }
+
     @PostMapping("/product/{id_product}/delete_property")
     public String deleteProperty(@PathVariable("id_product") int idProduct, @RequestParam int id) {
         Person owner = productService.findProductById(idProduct).getOwner();
-        productService.deletePropertyFromProduct(id, idProduct,owner);
+        productService.deletePropertyFromProduct(id, idProduct, owner);
 
         return "redirect:/market/product/{id_product}";
     }
+
     @PostMapping("/product/{id_product}/add_review")
     public String addReview(@PathVariable("id_product") int idProduct,
                             @ModelAttribute("newReview") Review review,
                             @RequestParam("files") List<MultipartFile> files) {
-        productService.addReviewToProduct(idProduct,review,files);
+        productService.addReviewToProduct(idProduct, review, files);
 
         return "redirect:/market/product/{id_product}";
     }
+
     @PostMapping("/product/{id_product}/delete_review")
     public String deleteReview(@PathVariable("id_product") int idProduct, @RequestParam("id") int id,
                                @RequestParam("login") String login) {
@@ -141,17 +147,19 @@ public class MainController {
 
         return "redirect:/market/product/{id_product}";
     }
+
     @PostMapping("/product/{id_product}/add_image")
     public String addImageToProduct(@PathVariable("id_product") int idProduct, @RequestParam("file") MultipartFile file) {
         Person owner = productService.findProductById(idProduct).getOwner();
-        productService.addImageToProduct(idProduct,file,owner);
+        productService.addImageToProduct(idProduct, file, owner);
 
         return "redirect:/market/product/{id_product}";
     }
+
     @PostMapping("/product/{id_product}/delete_image")
     public String deleteImageToProduct(@PathVariable("id_product") int idProduct, @RequestParam("id_image") String idImage) {
         Person owner = productService.findProductById(idProduct).getOwner();
-        productService.deleteImageFromProduct(idProduct,Integer.parseInt(idImage),owner);
+        productService.deleteImageFromProduct(idProduct, Integer.parseInt(idImage), owner);
 
         return "redirect:/market/product/{id_product}";
     }

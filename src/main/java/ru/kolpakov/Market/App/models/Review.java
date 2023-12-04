@@ -4,6 +4,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import ru.kolpakov.Market.SecurityForApp.models.Person;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
