@@ -5,8 +5,6 @@ services:
 
   postgres:
     container_name: postgres
-    ports:
-      - '5433:5432'
     image: postgres
     volumes:
       - pgdata:/var/lib/postgresql/data
@@ -19,20 +17,19 @@ services:
     image: adminer
     restart: always
     ports:
-      - '8080:8080'
-
+     - '8082:8080'
   app:
-   build: .
-   ports:
-    - '8081:8080'
-   container_name: app
-   depends_on:
-    - postgres
-   environment:
-    - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/market_db
-    - SPRING_DATASOURCE_USERNAME=postgres
-    - SPRING_DATASOURCE_PASSWORD=postgres
-    - SPRING_JPA_HIBERNATE_DDL_AUTO=update
+    build: .
+    ports:
+      - '5555:8080'
+    container_name: app
+    depends_on:
+      - postgres
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/market_db
+      - SPRING_DATASOURCE_USERNAME=postgres
+      - SPRING_DATASOURCE_PASSWORD=postgres
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=update
 
 volumes:
   pgdata:
