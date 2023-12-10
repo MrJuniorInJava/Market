@@ -155,9 +155,9 @@ public class ProductService {
             productImage = productImageToImageEntity(file);
             if (product.getImages().isEmpty()) {
                 productImage.setPreviewImage(true);
-                product.addImageToProduct(productImage);
-                productImagesRepository.save(productImage);
             }
+            product.addImageToProduct(productImage);
+            productImagesRepository.save(productImage);
         }
     }
 
