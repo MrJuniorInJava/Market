@@ -2,6 +2,8 @@
 <html lang="en" xmlns:margin-right="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
+    <meta name="_csrf" th:content="${_csrf.token}"/>
+    <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
     <title>Product</title>
     <style>
         .rating {
@@ -167,6 +169,7 @@
                 <div class="modal-content">
                     <span class="close" onclick="closeEnlargedModal()">&times;</span>
                     <img class="enlarged-image" id="enlargedImage" src="" alt="Увеличенное изображение">
+                    <button onclick="deleteImage()">Удалить</button>
                 </div>
             </div>
         </div>
@@ -416,7 +419,6 @@
     function changePreview(clickedImage) {
         var previewImage = document.getElementById('previewImage');
         previewImage.src = clickedImage.src;
-        updatePreviewThumbnails();
     }
 
     function openEnlargedModal() {
@@ -428,26 +430,74 @@
         var enlargedModal = document.getElementById('enlargedModal');
         enlargedModal.style.display = 'none';
     }
-    function updatePreviewThumbnails() {
-        var previewThumbnails = document.getElementById('previewThumbnails');
-        previewThumbnails.innerHTML = ''; // Очищаем содержимое
+    function deleteImage() {
+        var enlargedImage = document.getElementById('enlargedImage');
 
-        // Добавляем превью-изображения в ленту
-        var ProductImages = document.getElementById('imageGallery').getElementsByTagName('img');
-        for (var i = 0; i < ProductImages.length; i++) {
-            var thumbnail = document.createElement('img');
-            thumbnail.src = ProductImages[i].src;
-            thumbnail.alt = 'Превью';
-            thumbnail.onclick = function () {
-                changePreview(this);
+        // Получение id продукта из URL
+        var url = window.location.href;
+        var productId = extractProductIdFromUrl(url);
+
+        if (productId) {
+            var imageId = getImageIdFromSrc(enlargedImage.src);
+
+            // Получение CSRF-токена из мета-тегов
+            var csrfToken = document.head.querySelector("[name=_csrf]").content;
+            var csrfHeader = document.head.querySelector("[name=_csrf_header]").content;
+
+            // Отправка запроса на удаление изображения с CSRF-токеном в заголовке
+            var xhr = new XMLHttpRequest();
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState === 4) {
+                    if (xhr.status === 200) {
+                        // Обработка успешного удаления
+                        closeEnlargedModal();
+                        window.location.reload();
+                    } else {
+                        // Обработка ошибки удаления
+                        alert('Ошибка при удалении изображения.');
+                    }
+                }
             };
-            previewThumbnails.appendChild(thumbnail);
+
+            // Открытие запроса перед установкой заголовка
+            xhr.open('DELETE', '/market/product/' + productId + '/delete_image/' + imageId, true);
+
+            // Заголовок запроса с CSRF-токеном
+            xhr.setRequestHeader(csrfHeader, csrfToken);
+
+            // Отправка запроса
+            xhr.send();
+        } else {
+            // Обработка ошибки получения id продукта из URL
+            alert('Ошибка при получении id продукта из URL.');
+        }
+    }
+
+    function extractProductIdFromUrl(url) {
+        // Регулярное выражение для извлечения id продукта из URL
+        var regex = /\/market\/product\/(\d+)/;
+        var match = url.match(regex);
+
+        if (match && match[1]) {
+            return match[1];
+        } else {
+            return null;
+        }
+    }
+    function getImageIdFromSrc(src) {
+        // Регулярное выражение для извлечения id изображения из URL
+        var regex = /\/market\/product_images\/(\d+)/;
+        var match = src.match(regex);
+
+        if (match && match[1]) {
+            return match[1];
+        } else {
+            return null;
         }
     }
 
     // Обновляем ленту превью при загрузке страницы
     window.onload = function () {
-        updatePreviewThumbnails();
         var scrollPosition = localStorage.getItem('scrollPosition');
         if (scrollPosition) {
             window.scrollTo(0, parseInt(scrollPosition));
@@ -460,7 +510,6 @@
     previewImage.onclick = function () {
         document.getElementById('enlargedImage').src = this.src;
         openEnlargedModal();
-        updatePreviewThumbnails(); // Обновляем ленту превью при открытии увеличенной картинки
     };
 
     // Добавьте обработчик событий для увеличенной картинки

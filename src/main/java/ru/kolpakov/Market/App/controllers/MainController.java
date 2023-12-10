@@ -1,6 +1,7 @@
 package ru.kolpakov.Market.App.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -156,12 +157,13 @@ public class MainController {
         return "redirect:/market/product/{id_product}";
     }
 
-    @PostMapping("/product/{id_product}/delete_image")
-    public String deleteImageToProduct(@PathVariable("id_product") int idProduct, @RequestParam("id_image") String idImage) {
+    @DeleteMapping("/product/{id_product}/delete_image/{id_image}")
+    @ResponseBody
+    public String deleteImageToProduct(@PathVariable("id_product") int idProduct, @PathVariable("id_image") String idImage) {
         Person owner = productService.findProductById(idProduct).getOwner();
         productService.deleteImageFromProduct(idProduct, Integer.parseInt(idImage), owner);
 
-        return "redirect:/market/product/{id_product}";
+        return "Удаление успешно";
     }
 
 
