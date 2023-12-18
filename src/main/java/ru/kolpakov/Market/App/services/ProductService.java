@@ -136,8 +136,7 @@ public class ProductService {
     }
 
     @Transactional
-    @PreAuthorize("hasRole('ROLE_ADMIN') or #login==principal.username")
-    public void deleteReviewFromProduct(int idProduct, int id, String login) {
+    public void deleteReviewFromProduct(int idProduct, int id) {
         Product product = productsRepository.findById(idProduct).get();
         product.getReviews().remove(reviewsRepository.findById(id).get());
         reviewsRepository.deleteById(id);

@@ -329,7 +329,6 @@
               th:action="@{/market/product/{id_product}/delete_review(id_product=${product.getId()})}"
               th:method="POST" class="delete-review-form">
             <input type="hidden" th:name="id" th:value="${review.getId()}"/>
-            <input type="hidden" th:name="login" th:value="${review.getOwner().getLogin()}"/>
             <input type="submit" value="Удалить отзыв" style="margin-left: 10px;"/>
         </form>
         <br/>

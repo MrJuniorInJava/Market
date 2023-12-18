@@ -118,6 +118,21 @@ public class Review {
         this.reviewImages = reviewImages;
     }
 
+    @Override
+    public String toString() {
+        return "Review{" +
+                "id=" + id +
+                ", rating=" + rating +
+                ", name='" + name + '\'' +
+                ", flaws='" + flaws + '\'' +
+                ", advantages='" + advantages + '\'' +
+                ", comment='" + comment + '\'' +
+                ", createdAt=" + createdAt +
+                ", product=" + product +
+                ", owner=" + owner +
+                '}';
+    }
+
     //Вспомогательные методы
     public void addImageToReview(ReviewImage reviewImage) {
         reviewImage.setReview(this);

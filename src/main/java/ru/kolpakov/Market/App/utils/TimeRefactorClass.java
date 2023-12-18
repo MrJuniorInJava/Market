@@ -19,6 +19,6 @@ public class TimeRefactorClass {
                 "([0-9]{2})" +
                 "[.0-9]+$");
         Matcher matcher = pattern.matcher(time.toString());
-        return  matcher.replaceAll("$7$8$9$10$11 $1$2$3$4$5");
+        return  matcher.replaceAll("$7$8$9$10$11 $5$2$3$4$1");
     }
 }

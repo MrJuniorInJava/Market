@@ -6,7 +6,6 @@ import org.springframework.http.HttpEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ru.kolpakov.Market.App.models.Product;
@@ -143,9 +142,8 @@ public class MainController {
     }
 
     @PostMapping("/product/{id_product}/delete_review")
-    public String deleteReview(@PathVariable("id_product") int idProduct, @RequestParam("id") int id,
-                               @RequestParam("login") String login) {
-        productService.deleteReviewFromProduct(idProduct, id, login);
+    public String deleteReview(@PathVariable("id_product") int idProduct, @RequestParam("id") int id) {
+        productService.deleteReviewFromProduct(idProduct, id);
 
         return "redirect:/market/product/{id_product}";
     }
