@@ -61,8 +61,7 @@ public class MainController {
     public String updateField(@PathVariable("id") int id,
                               @RequestParam("fieldName") String fieldName,
                               @RequestParam("newValue") String newValue) {
-        Person owner = productService.findProductById(id).getOwner();
-        productService.updateProductField(id, fieldName, newValue, owner);
+        productService.updateProductField(id, fieldName, newValue);
         return "redirect:/market/product/{id}";
     }
 
@@ -74,7 +73,7 @@ public class MainController {
         return "market/main_page";
     }
 
-    @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_SELLER')")
+
     @GetMapping("/add_product")
     public String addProductPage(Model model) {
         model.addAttribute("product", new Product());
@@ -91,8 +90,7 @@ public class MainController {
 
     @PostMapping("/delete_product")
     public String deleteProduct(@RequestParam("id") int id) {
-        Person owner = productService.findProductById(id).getOwner();
-        productService.deleteProductById(id, owner);
+        productService.deleteProduct(id);
         return "redirect:/market";
     }
 
@@ -162,7 +160,7 @@ public class MainController {
         Person owner = productService.findProductById(idProduct).getOwner();
         productService.deleteImageFromProduct(idProduct, Integer.parseInt(idImage), owner);
 
-        return "Удаление успешно";
+        return "Удаление прошло успешно";
     }
 
 

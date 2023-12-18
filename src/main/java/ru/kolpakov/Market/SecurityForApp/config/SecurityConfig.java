@@ -29,6 +29,7 @@ public class SecurityConfig {
         http
                 .authorizeRequests()
                 .antMatchers("/auth/login", "/auth/registration", "/error").permitAll()//Пускать всех на эти страницы
+                .antMatchers("/market/add_product").hasRole("SELLER")
                 .anyRequest().hasAnyRole("USER", "ADMIN","SELLER")//На все другие страницы пускать только пользователей с данными ролями
                 .and()
                 .formLogin()

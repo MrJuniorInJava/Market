@@ -50,7 +50,6 @@ public class ProductService {
     }
 
     @Transactional
-    @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_SELLER')")
     public void addProduct(Product product, List<MultipartFile> files) {
         ProductImage productImage = null;
         for (MultipartFile file : files) {
@@ -68,8 +67,7 @@ public class ProductService {
     }
 
     @Transactional
-    @PreAuthorize("hasRole('ROLE_ADMIN') or (hasRole('ROLE_SELLER') and #owner.login==principal.username)")
-    public void deleteProductById(int id, Person owner) {
+    public void deleteProduct(int id) {
         productsRepository.deleteById(id);
     }
 
@@ -81,8 +79,7 @@ public class ProductService {
     }
 
     @Transactional
-    @PreAuthorize("hasRole('ROLE_ADMIN') or (hasRole('ROLE_SELLER') and #owner.login==principal.username)")
-    public void updateProductField(int id, String fieldName, String newValue, Person owner) {
+    public void updateProductField(int id, String fieldName, String newValue) {
         Product currentProduct = productsRepository.findById(id).get();
         switch (fieldName) {
             case "name":
