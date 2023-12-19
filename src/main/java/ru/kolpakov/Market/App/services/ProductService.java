@@ -97,15 +97,13 @@ public class ProductService {
     }
 
     @Transactional
-    @PreAuthorize("hasRole('ROLE_ADMIN') or (hasRole('ROLE_SELLER') and #owner.login==principal.username)")
-    public void addPropertyToProduct(int idProduct, Property property, Person owner) {
+    public void addPropertyToProduct(int idProduct, Property property) {
         propertiesRepository.save(property);
         productsRepository.findById(idProduct).get().addPropertyToProduct(property);
     }
 
     @Transactional
-    @PreAuthorize("hasRole('ROLE_ADMIN') or (hasRole('ROLE_SELLER') and #owner.login==principal.username)")
-    public void deletePropertyFromProduct(int id, int idProduct, Person owner) {
+    public void deletePropertyFromProduct(int idProduct, int id) {
         Property property = propertiesRepository.findById(id).get();
         productsRepository.findById(idProduct).get().getProperties().remove(property);
         propertiesRepository.delete(property);
@@ -144,7 +142,6 @@ public class ProductService {
     }
 
     @Transactional
-    @PreAuthorize("hasRole('ROLE_ADMIN') or #owner.login==principal.username")
     public void addImageToProduct(int idProduct, MultipartFile file, Person owner) {
         Product product = productsRepository.findById(idProduct).get();
         ProductImage productImage = null;
@@ -160,7 +157,6 @@ public class ProductService {
     }
 
     @Transactional
-    @PreAuthorize("hasRole('ROLE_ADMIN') or #owner.login==principal.username")
     public void deleteImageFromProduct(int idProduct, int idImage, Person owner) {
         Product product = productsRepository.findById(idProduct).get();
         ProductImage productImage = productImagesRepository.findById(idImage).get();

@@ -10,7 +10,7 @@ import ru.kolpakov.Market.App.repositories.ReviewsRepository;
 import ru.kolpakov.Market.App.utils.GetPerson;
 import ru.kolpakov.Market.App.utils.TimeRefactorClass;
 import ru.kolpakov.Market.SecurityForApp.models.Person;
-import ru.kolpakov.Market.SecurityForApp.utils.IncorrectUserIsDoingSomethingObjectException;
+import ru.kolpakov.Market.SecurityForApp.utils.IncorrectUserIsDoingSomethingWithObjectException;
 
 import java.time.LocalDateTime;
 import java.util.Arrays;
@@ -42,7 +42,7 @@ public class MyReviewAspect {
         } else {
             if (user.getId()
                     != reviewsRepository.findById((Integer) args[1]).get().getOwner().getId()) {
-                throw new IncorrectUserIsDoingSomethingObjectException("Вы не можете удалять чужие отзывы");
+                throw new IncorrectUserIsDoingSomethingWithObjectException("Вы не можете удалять чужие отзывы");
             } else {
                 return;
             }

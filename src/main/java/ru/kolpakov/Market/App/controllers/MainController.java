@@ -116,16 +116,14 @@ public class MainController {
 
     @PostMapping("/product/{id_product}/add_property")
     public String addProperty(@PathVariable("id_product") int idProduct, @ModelAttribute("newProperty") Property property) {
-        Person owner = productService.findProductById(idProduct).getOwner();
-        productService.addPropertyToProduct(idProduct, property, owner);
+        productService.addPropertyToProduct(idProduct, property);
 
         return "redirect:/market/product/{id_product}";
     }
 
     @PostMapping("/product/{id_product}/delete_property")
     public String deleteProperty(@PathVariable("id_product") int idProduct, @RequestParam int id) {
-        Person owner = productService.findProductById(idProduct).getOwner();
-        productService.deletePropertyFromProduct(id, idProduct, owner);
+        productService.deletePropertyFromProduct(idProduct, id);
 
         return "redirect:/market/product/{id_product}";
     }

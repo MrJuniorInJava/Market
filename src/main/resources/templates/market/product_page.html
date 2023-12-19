@@ -174,7 +174,7 @@
             </div>
         </div>
     </div>
-    <form th:if="${user.getRole()=='ROLE_ADMIN' or (user.getRole()=='ROLE_SELLER' and user.getLogin()==product.getOwner().getLogin())}"
+    <form th:if="${user.getRole()=='ROLE_ADMIN' or (user.getRole()=='ROLE_SELLER' and user.getId()==product.getOwner().getId())}"
           th:method="POST"
           th:action="@{/market/product/{id}/add_image(id=${product.getId()})}" enctype="multipart/form-data">
         Добавить изображение <input type="file" name="file" multiple/>
@@ -185,7 +185,7 @@
         <span style="font-size: 1.7em;" th:text="${product.getAvgRating() + '/5'}"></span>
     </p>
 
-    <form th:if="${user.getRole()=='ROLE_ADMIN' or (user.getRole()=='ROLE_SELLER' and user.getLogin()==product.getOwner().getLogin())}"
+    <form th:if="${user.getRole()=='ROLE_ADMIN' or (user.getRole()=='ROLE_SELLER' and user.getId()==product.getOwner().getId())}"
           th:method="POST"
           th:action="@{/market/product/{id}(id=${product.getId()})}">
         Ввести новое имя <textarea name="newValue"></textarea>
@@ -195,7 +195,7 @@
 
     <h4>Описание:</h4>
     <span th:text="${product.getDescription()}"></span>
-    <form th:if="${user.getRole()=='ROLE_ADMIN' or (user.getRole()=='ROLE_SELLER' and user.getLogin()==product.getOwner().getLogin())}"
+    <form th:if="${user.getRole()=='ROLE_ADMIN' or (user.getRole()=='ROLE_SELLER' and user.getId()==product.getOwner().getId())}"
           th:method="POST"
           th:action="@{/market/product/{id}(id=${product.getId()})}">
         Ввести новое описание <textarea name="newValue"></textarea>
@@ -206,7 +206,7 @@
     <p>Цена:
         <span th:text="${product.getPrice()} + ' руб'"></span>
     </p>
-    <form th:if="${user.getRole()=='ROLE_ADMIN' or (user.getRole()=='ROLE_SELLER' and user.getLogin()==product.getOwner().getLogin())}"
+    <form th:if="${user.getRole()=='ROLE_ADMIN' or (user.getRole()=='ROLE_SELLER' and user.getId()==product.getOwner().getId())}"
           th:method="POST"
           th:action="@{/market/product/{id}(id=${product.getId()})}">
         Ввести новую цену <textarea name="newValue"></textarea>
@@ -225,14 +225,14 @@
     <div th:unless="${product.getProperties().isEmpty()}" th:each="property : ${product.getProperties()}"
          style="display: flex; align-items: baseline;">
         <a th:text="${property.getName() + ': ' + property.getValue()}">Характеристика</a>
-        <form th:if="${user.getRole()=='ROLE_ADMIN' or (user.getRole()=='ROLE_SELLER' and user.getLogin()==product.getOwner().getLogin())}"
+        <form th:if="${user.getRole()=='ROLE_ADMIN' or (user.getRole()=='ROLE_SELLER' and user.getId()==product.getOwner().getId())}"
               th:action="@{/market/product/{id_product}/delete_property(id_product=${product.getId()})}"
               th:method="DELETE">
             <input type="hidden" th:name="id" th:value="${property.getId()}"/>
             <input type="submit" value="Удалить характеристику товара" style="margin-left: 10px;"/>
         </form>
     </div>
-    <form th:if="${user.getRole()=='ROLE_ADMIN' or (user.getRole()=='ROLE_SELLER' and user.getLogin()==product.getOwner().getLogin())}"
+    <form th:if="${user.getRole()=='ROLE_ADMIN' or (user.getRole()=='ROLE_SELLER' and user.getId()==product.getOwner().getId())}"
           th:action="@{/market/product/{id_product}/add_property(id_product=${product.getId()})}" method="post"
           th:object="${newProperty}">
         <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>

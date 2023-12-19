@@ -10,7 +10,7 @@ import ru.kolpakov.Market.App.repositories.ProductsRepository;
 import ru.kolpakov.Market.App.utils.GetPerson;
 import ru.kolpakov.Market.App.utils.TimeRefactorClass;
 import ru.kolpakov.Market.SecurityForApp.models.Person;
-import ru.kolpakov.Market.SecurityForApp.utils.IncorrectUserIsDoingSomethingObjectException;
+import ru.kolpakov.Market.SecurityForApp.utils.IncorrectUserIsDoingSomethingWithObjectException;
 
 import java.time.LocalDateTime;
 import java.util.Arrays;
@@ -27,10 +27,8 @@ public class MyProductAspect {
 
     @Before("execution(public * ru.kolpakov.Market.App.services.*.addProduct*(..))")
     public void beforeAddProductMethodAdvice(JoinPoint joinPoint) {
-        Object[] fields = joinPoint.getArgs();
-
         if (!GetPerson.returnPersonFromContext().getRole().equals("ROLE_SELLER")) {
-            throw new IncorrectUserIsDoingSomethingObjectException("Вы не можете добавлять товары");
+            throw new IncorrectUserIsDoingSomethingWithObjectException("Вы не можете добавлять товары");
         }
     }
 
@@ -44,20 +42,20 @@ public class MyProductAspect {
                 + TimeRefactorClass.timeRefactor(LocalDateTime.now()));
 
     }
-    @Before("execution(public * ru.kolpakov.Market.App.services.*.updateProductField(..))")
-    public void beforeUpdateProductFieldsMethodAdvice(JoinPoint joinPoint) {
+
+    @Before("execution(public * ru.kolpakov.Market.App.services.*.updateProductField(..)) ||" +
+            "execution(public * ru.kolpakov.Market.App.services.*.*Property*Product(..)) ||" +
+            "execution(public * ru.kolpakov.Market.App.services.*.*Image*Product(..))")
+    public void beforeUpdateProductMethodsAdvice(JoinPoint joinPoint) {
         Person user = GetPerson.returnPersonFromContext();
-        Object[] fields = joinPoint.getArgs();
-        if (user.getRole().equals("ROLE_ADMIN")) {
-            return;
+        Object[] args = joinPoint.getArgs();
+        if (user.getId()
+                != productsRepository.findById((Integer) args[0]).get().getOwner().getId()) {
+            throw new IncorrectUserIsDoingSomethingWithObjectException("Вы не можете изменять даннный товар");
         } else {
-            if (user.getId()
-                    != productsRepository.findById((Integer) fields[0]).get().getOwner().getId()) {
-                throw new IncorrectUserIsDoingSomethingObjectException("Вы не можете обновлять характеристики данного товара");
-            } else {
-                return;
-            }
+            return;
         }
+
     }
 
     @Before("execution(public * ru.kolpakov.Market.App.services.*.deleteProduct*(..))")
@@ -69,7 +67,7 @@ public class MyProductAspect {
         } else {
             if (user.getId()
                     != productsRepository.findById((Integer) fields[0]).get().getOwner().getId()) {
-                throw new IncorrectUserIsDoingSomethingObjectException("Вы не можете удалить этот товар");
+                throw new IncorrectUserIsDoingSomethingWithObjectException("Вы не можете удалить этот товар");
             } else {
                 return;
             }

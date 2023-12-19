@@ -48,4 +48,5 @@ public class Property {
     public void setProduct(Product product) {
         this.product = product;
     }
+
 }
