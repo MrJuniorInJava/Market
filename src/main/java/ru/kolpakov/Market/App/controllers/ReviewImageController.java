@@ -26,7 +26,7 @@ public class ReviewImageController {
 
 
     @GetMapping("/market/review_images/{id}")
-    private ResponseEntity<?> getImageById(@PathVariable int id) {
+    private ResponseEntity<?> findImageById(@PathVariable int id) {
         ReviewImage reviewImage = reviewImagesRepository.findById(id).get();
 
         return ResponseEntity.ok()

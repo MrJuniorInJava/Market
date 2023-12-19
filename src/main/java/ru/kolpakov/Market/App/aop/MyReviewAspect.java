@@ -28,7 +28,7 @@ public class MyReviewAspect {
     @After("execution(public * ru.kolpakov.Market.App.services.*.addReview*(..))")
     public void afterAddReviewMethodsAdvice(JoinPoint joinPoint) {
         String namePerson = GetPerson.returnPersonFromContext().getUsername();
-        System.out.println("Пользователь " + "'" + namePerson + "'" + " добавил отзыв к товару " + "c id " + joinPoint.getArgs()[1] + " в "
+        System.out.println("Пользователь " + "'" + namePerson + "'" + " добавил отзыв к товару " + "c id " + joinPoint.getArgs()[0] + " в "
                 + TimeRefactorClass.timeRefactor(LocalDateTime.now()));
 
     }
@@ -58,7 +58,7 @@ public class MyReviewAspect {
             System.out.println("Администратор " + "'" + namePerson + "'" + " удалил отзыв c id " + joinPoint.getArgs()[1] + " к товару " + "c id " + joinPoint.getArgs()[0] + " в "
                     + TimeRefactorClass.timeRefactor(LocalDateTime.now()));
         } else {
-            System.out.println("Пользователь " + "'" + namePerson + "'" + " удалил свой отзыв к товару " + "c id " + Arrays.stream(joinPoint.getArgs()).findFirst().get() + " в "
+            System.out.println("Пользователь " + "'" + namePerson + "'" + " удалил свой отзыв к товару " + "c id " + joinPoint.getArgs()[0] + " в "
                     + TimeRefactorClass.timeRefactor(LocalDateTime.now()));
         }
     }

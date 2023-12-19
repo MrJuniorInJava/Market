@@ -23,7 +23,7 @@ public class ProductImageController {
 
 
     @GetMapping("/market/product_images/{id}")
-    private ResponseEntity<?> getImageById(@PathVariable int id) {
+    private ResponseEntity<?> findImageById(@PathVariable int id) {
         ProductImage productImage = productImagesRepository.findById(id).get();
 
         return ResponseEntity.ok()

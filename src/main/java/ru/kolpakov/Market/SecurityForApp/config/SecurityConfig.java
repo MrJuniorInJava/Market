@@ -15,7 +15,6 @@ import ru.kolpakov.Market.SecurityForApp.services.PersonDetailsService;
 
 @Configuration
 @EnableWebSecurity
-@EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfig {
     private final PersonDetailsService personDetailsService;
 

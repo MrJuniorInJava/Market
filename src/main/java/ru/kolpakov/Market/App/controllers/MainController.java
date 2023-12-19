@@ -1,13 +1,12 @@
 package ru.kolpakov.Market.App.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.EnableAspectJAutoProxy;
-import org.springframework.http.HttpEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.server.ResponseStatusException;
 import ru.kolpakov.Market.App.models.Product;
 import ru.kolpakov.Market.App.models.Property;
 import ru.kolpakov.Market.App.models.Review;
@@ -16,6 +15,7 @@ import ru.kolpakov.Market.App.services.ProductService;
 import ru.kolpakov.Market.App.utils.GetPerson;
 import ru.kolpakov.Market.SecurityForApp.models.Person;
 import ru.kolpakov.Market.SecurityForApp.services.PersonDetailsService;
+import ru.kolpakov.Market.SecurityForApp.utils.IncorrectUserIsDoingSomethingWithObjectException;
 
 import java.util.Collections;
 import java.util.List;
@@ -160,6 +160,5 @@ public class MainController {
 
         return "Удаление прошло успешно";
     }
-
 
 }

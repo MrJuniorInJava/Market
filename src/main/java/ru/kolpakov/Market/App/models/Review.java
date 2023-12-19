@@ -1,9 +1,11 @@
 package ru.kolpakov.Market.App.models;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.format.annotation.DateTimeFormat;
 import ru.kolpakov.Market.SecurityForApp.models.Person;
 
 import javax.persistence.*;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -16,6 +18,7 @@ public class Review {
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+    @Min(value = 1, message = "Укажите рейтинг от 1 до 5")
     @Column(name = "rating")
     private int rating;
     @Column(name = "name")
